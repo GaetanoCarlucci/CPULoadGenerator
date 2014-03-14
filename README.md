@@ -6,6 +6,6 @@ The script takes the desired CPU load and the duration of the load generation as
 
 Usage
 -------------
-To run it for %duration seconds at the %setpoint of CPU utilization: ::
+To run it for "duration" in seconds at the setpoint in % of CPU utilization: ::
 	
-	./CpuLoadGenerator.py -l %setpoint -d %duration
+	./CpuLoadGenerator.py -l <setpoint> -d <duration>
