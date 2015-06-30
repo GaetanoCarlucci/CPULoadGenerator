@@ -7,12 +7,12 @@ The script takes the desired CPU load and the duration of the load generation as
 
 Usage
 -------------
-
 Install matplotlib: it allows to monitor te status of CPU 0: ::
+
 	sudo apt-get install python-matplotlib
 
 To run the script that generates CPU load run: :: 
 	
 	./CpuLoadGenerator.py -l <setpoint> -d <duration>
 
-where "duration" sets the time *duration* of the script in seconds and *setpoint* sets the percentage of CPU load to generate.
+where **duration** sets the time duration of the script in seconds and **setpoint** sets the percentage of CPU load to generate.
