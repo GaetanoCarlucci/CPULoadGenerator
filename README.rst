@@ -7,7 +7,7 @@ The script takes the desired CPU load and the duration of the load generation as
 
 Usage
 -------------
-Install matplotlib: it allows to monitor te status of CPU 0: ::
+Install matplotlib: it allows to monitor the status of CPU 0: ::
 
 	sudo apt-get install python-matplotlib
 
