@@ -13,12 +13,12 @@ import matplotlib.pyplot as plt
 from twisted.python import usage
 
 class Options(usage.Options):
-     """
-    Defines the default input parameters
+    """
+       Defines the default input parameters
     """
     optParameters = [
             ["CPU load", "l", 0.2, None, float],
-            ["duration", "d", 20, None, float],
+            ["duration", "d", 10, None, float],
         ]
         
 class MonitorThread(threading.Thread):
@@ -89,6 +89,25 @@ class ControllerThread(threading.Thread):
            if self.sleepTime < 0:
               self.sleepTime = 0;
               self.int_err = self.int_err - self.err*samp_int
+
+class realTimeplot():
+
+    def __init__(self):
+        plt.axis([0, 100, -10, 10])
+        plt.ion()
+        plt.show()
+        ydata = [0]
+        line, = plt.plot(ydata)
+        ts_start = time.time()
+
+    def plotSample(time,sample):
+        p_x = int(int(time.time())-int(ts_start))
+        p_y = sample # keeps getting generated in the loop code
+        ydata.append(p_y)
+        line.set_xdata(np.arange(len(ydata)))
+        line.set_ydata(ydata)
+        plt.draw()
+        #time.sleep(0.05)
               
                
 if __name__ == "__main__":
@@ -103,42 +122,40 @@ if __name__ == "__main__":
         sys.exit(1)
     else:
         if options['CPU load'] < 0 or options['CPU load'] > 1: 
-            raise(ValueError, "CPU load setpoint out of the range [0,1]")
+            raise(ValueError, "CPU target load out of the range [0,1]")
         if options['duration'] < 0: 
-            raise(ValueError, "Invalid negative duration")
+            raise(ValueError, "Invalid duration")
                 
     monitor = MonitorThread()       
     monitor.start()
-
-    SAMPLES=1000;
 
     control = ControllerThread()
     control.start()
     control.setCpuTarget(options['CPU load'])
     last_ts = time.time()
 
-    a1 = deque([0]*SAMPLES)
-    target = deque([0]*SAMPLES)
-    tempoReale = deque([0]*SAMPLES)
+    #a1 = deque([0]*SAMPLES)
+    #target = deque([0]*SAMPLES)
+    #tempoReale = deque([0]*SAMPLES)
         
-    x = plt.axes(xlim=(0, options['duration']), ylim=(0, 100))
+    #x = plt.axes(xlim=(0, options['duration']), ylim=(0, 100))
 
-    line1, = plt.plot(a1)
-    line2, = plt.plot(target)
-    plt.ion()
-    plt.ylim([0,100])
-    plt.show()
+    #line1, = plt.plot(a1)
+    #line2, = plt.plot(target)
+    #plt.ion()
+    #plt.ylim([0,100])
+    #plt.show()
     tempo = 0;
 
-    plt.xlabel('Time(sec)')
-    plt.ylabel('CPU load [0] %')
+    #plt.xlabel('Time(sec)')
+    #plt.ylabel('CPU load [0] %')
     
     while tempo < options['duration']:
 
         for i in range(1,2):
            pr = 213123 + 324234 * 23423423
 
-        control.setCpu(monitor.get_cpu_load())
+        control.setCpu(monitor.getCpuLoad())
         sleep_time = control.getSleepTime()
         time.sleep(sleep_time)
         
@@ -147,17 +164,20 @@ if __name__ == "__main__":
         last_ts = ts
         tempo += delta
 
-        a1.appendleft(monitor.get_cpu_load())
-        target.appendleft(control.getCpuTarget()*100)
-        tempoReale.appendleft(tempo)
-        a1.pop()
-        target.pop()
-        tempoReale.pop()
-        line1.set_ydata(a1)
-        line1.set_xdata(tempoReale)
-        line2.set_xdata(tempoReale)
-        line2.set_ydata(target)
-        plt.draw()
+        graph = realTimeplot()
+        graph.plotSample(control.getCpuTarget()*100)
+
+       # a1.appendleft(monitor.getCpuLoad())
+      #  target.appendleft(control.getCpuTarget()*100)
+      #  tempoReale.appendleft(tempo)
+      #  a1.pop()
+     #   target.pop()
+     #   tempoReale.pop()
+     #   line1.set_ydata(a1)
+      #  line1.set_xdata(tempoReale)
+      #  line2.set_xdata(tempoReale)
+     #   line2.set_ydata(target)
+    #    plt.draw()
 
     monitor.running = 0;
     control.running = 0;
