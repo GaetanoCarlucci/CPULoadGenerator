@@ -13,43 +13,52 @@ import matplotlib.pyplot as plt
 from twisted.python import usage
 
 class Options(usage.Options):
+     """
+    Defines the default input parameters
+    """
     optParameters = [
             ["CPU load", "l", 0.2, None, float],
             ["duration", "d", 20, None, float],
         ]
         
 class MonitorThread(threading.Thread):
+    """
+       Monitors the CPU status
+    """
     def __init__(self):
-        self.interval = 0.1;
-        self.sample = 0;
-        self.cpu = 0;
-        self.running = 1;
-        self.alpha = 0.1;
-        self.cpu_log = list()
+        self.interval = 0.1; # sample time interval
+        self.sample = 0; # cpu load measurement sample
+        self.cpu = 0; # cpu load filtered
+        self.running = 1; # thread status
+        self.alpha = 0.1; # filter coefficient
+        # self.cpu_log = list() 
         super(MonitorThread, self).__init__()
         
-    def get_cpu_load(self):
+    def getCpuLoad(self):
         return self.cpu
         
     def run(self):
         p = psutil.Process(os.getpid())
-        p.set_cpu_affinity([0]) #the process is forced to run only on CPU 0
+        p.set_cpu_affinity([0]) #the process is forced to run only on CPU 0: it can be extended
         while self.running:
             self.sample = p.get_cpu_percent(interval=self.interval)
-            self.cpu = self.alpha * self.sample + (1-self.alpha)*self.cpu
-            self.cpu_log.append(self.cpu)
+            self.cpu = self.alpha * self.sample + (1-self.alpha)*self.cpu # first order filter on the measurement samples
+            #self.cpu_log.append(self.cpu)
 
 
 class ControllerThread(threading.Thread):
+    """
+        Controls the CPU status
+    """
     def __init__(self):
-        self.running = 1;
-        self.sleepTime = 0.0;
-        self.CT = 0.20;    #default value
-        self.cpu = 0;
-        self.ki = -1;
-        self.kp = -0.5;
-        self.int_err = 0;
-        self.last_ts = time.time();
+        self.running = 1;  # thread status
+        self.sleepTime = 0.0; # this is controller output: determines the sleep time to achieve the requested CPU load
+        self.CT = 0.20;    # target CPU load should be provided as input 
+        self.cpu = 0;   # current CPU load returned from the Monitor thread
+        self.ki = -1;   # integral constant of th PI regulator (the plant is an inverter)
+        self.kp = -0.5; # proportional constant of th PI regulator (the plant is an inverter)
+        self.int_err = 0;  # integral error
+        self.last_ts = time.time();  # last sampled time
         super(ControllerThread, self).__init__()
         
     def getSleepTime(self):
@@ -65,18 +74,18 @@ class ControllerThread(threading.Thread):
        self.CT = CT
      
     def run(self):
-        #through this timer this cycle has the same sampling interval as the cycle in MonitorThread
+        # ControllerThread has to have the same sampling interval as MonitorThread
         while self.running:
            time.sleep(0.1)
-           self.err = self.CT - self.cpu*0.01
+           self.err = self.CT - self.cpu*0.01  # computes the proportional error
            ts = time.time()
            
-           samp_int = ts - self.last_ts
-           self.int_err = self.int_err + self.err*samp_int
+           samp_int = ts - self.last_ts  # sample interval 
+           self.int_err = self.int_err + self.err*samp_int  # computes the integral error
            self.last_ts = ts
-           self.sleepTime = self.kp*self.err + self.ki*self.int_err
+           self.sleepTime = self.kp*self.err + self.ki*self.int_err # PI regulator output
            
-           
+           #anti wind up control
            if self.sleepTime < 0:
               self.sleepTime = 0;
               self.int_err = self.int_err - self.err*samp_int
