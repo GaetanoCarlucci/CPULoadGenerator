@@ -150,7 +150,7 @@ if __name__ == "__main__":
     while (time.time() - start_time) < options['duration']:
 
         for i in range(1,2):
-           pr = 213123 + 324234 * 23423423
+           pr = 213123 + 324234 * 23423423 # generates some load
 
         control.setCpu(monitor.getCpuLoad())
         sleep_time = control.getSleepTime()
