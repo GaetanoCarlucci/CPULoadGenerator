@@ -15,8 +15,9 @@ class Options(usage.Options):
        Defines the default input parameters
     """
     optParameters = [
-            ["CPU load", "l", 0.2, None, float],
-            ["duration", "d", 20, None, float],
+            ["cpuLoad", "l", 0.2, "Cpu Target Load", float],
+            ["duration", "d", 5, "Duration", int],
+            ["plot", "p" , 1, "Enable Plot", int]
         ]
         
 class MonitorThread(threading.Thread):
@@ -130,21 +131,28 @@ if __name__ == "__main__":
         print '%s: Try --help for usage details.' % (sys.argv[0])
         sys.exit(1)
     else:
-        if options['CPU load'] < 0 or options['CPU load'] > 1: 
-            raise(ValueError, "CPU target load out of the range [0,1]")
+        if options['cpuLoad'] < 0 or options['cpuLoad'] > 1: 
+            print "CPU target load out of the range [0,1]"
+            sys.exit(1)
         if options['duration'] < 0: 
-            raise(ValueError, "Invalid duration")
+            print "Invalid duration"
+            sys.exit(1)
+        if options['plot'] != 0 and options['plot'] != 1: 
+            print "plot can be enabled 1 or disabled 0"
+            sys.exit(1)
+
                 
     monitor = MonitorThread()       
     monitor.start()
 
     control = ControllerThread()
     control.start()
-    control.setCpuTarget(options['CPU load'])
+    control.setCpuTarget(options['cpuLoad'])
 
     start_time = time.time()
 
-    graph = realTimePlot(options['duration'])
+    if options['plot']:
+       graph = realTimePlot(options['duration'])
 
     
     while (time.time() - start_time) < options['duration']:
@@ -156,7 +164,8 @@ if __name__ == "__main__":
         sleep_time = control.getSleepTime()
         time.sleep(sleep_time)
         
-        graph.plotSample(monitor.getCpuLoad(),control.getCpuTarget()*100)
+        if options['plot']:
+            graph.plotSample(monitor.getCpuLoad(),control.getCpuTarget()*100)
 
     monitor.running = 0;
     control.running = 0;
