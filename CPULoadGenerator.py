@@ -57,7 +57,7 @@ class ControllerThread(threading.Thread):
         self.sleepTime = 0.0; # this is controller output: determines the sleep time to achieve the requested CPU load
         self.CT = 0.20;    # target CPU load should be provided as input 
         self.cpu = 0;   # current CPU load returned from the Monitor thread
-        self.ki = -2;   # integral constant of th PI regulator (the plant is an inverter)
+        self.ki = -1;   # integral constant of th PI regulator (the plant is an inverter)
         self.kp = -0.5; # proportional constant of th PI regulator (the plant is an inverter)
         self.int_err = 0;  # integral error
         self.last_ts = time.time();  # last sampled time
@@ -85,7 +85,7 @@ class ControllerThread(threading.Thread):
            samp_int = ts - self.last_ts  # sample interval 
            self.int_err = self.int_err + self.err*samp_int  # computes the integral error
            self.last_ts = ts
-           self.sleepTime = self.kp*self.err + self.ki*self.int_err # PI regulator output
+           self.sleepTime = self.kp*self.err  + self.ki*self.int_err
            
            #anti wind up control
            if self.sleepTime < 0:
@@ -143,7 +143,7 @@ if __name__ == "__main__":
         if options['plot'] != 0 and options['plot'] != 1: 
             print "plot can be enabled 1 or disabled 0"
             sys.exit(1)
-        if options['cpu'] > multiprocessing.cpu_count(): 
+        if options['cpu'] >= multiprocessing.cpu_count(): 
             print "You have only %d cores on your machine" % (multiprocessing.cpu_count())
             sys.exit(1)
             
@@ -162,7 +162,7 @@ if __name__ == "__main__":
        graph = realTimePlot(options['duration'], options['cpu'])
 
     
-    while (time.time() - start_time) < options['duration']:
+    while (time.time() - start_time) <= options['duration']:
 
         for i in range(1,2):
            pr = 213123 + 324234 * 23423423 # generates some load
