@@ -107,7 +107,8 @@ class realTimePlot():
         self.xdata = [0]
         self.line_target, = plt.plot(self.y_target)
         self.line_load, = plt.plot(self.y_load)
-        plt.legend([self.line_target, self.line_load], ["Target CPU", "CPU [%d] Load" % (cpu)])
+        plt.legend([self.line_target, self.line_load], ["Target CPU", "CPU [%d] Load" % (cpu)], ncol=2)
+        plt.grid(True)
         self.ts_start = time.time()
 
     def plotSample(self, sample, target):
