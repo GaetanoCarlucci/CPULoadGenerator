@@ -2,7 +2,7 @@ CPULoadGenerator
 ================
 
 This simple script allows to generate a fixed CPU load for a finite time period. To the purpose, a PI controller is employed. 
-The script takes the desired CPU load and the duration of the load generation as input. The process is forced to run only on CPU 0. The controller and the CPU monitor are implemented in two different threads.
+The script takes in input the desired CPU load, the duration of the experiment, the cpu core on which generate the load.  The controller and the CPU monitor are implemented in two different threads.
 
 
 Usage
@@ -11,8 +11,14 @@ Install matplotlib: it allows to monitor the status of CPU 0: ::
 
 	sudo apt-get install python-matplotlib
 
-To run the script that generates CPU load run: :: 
+To generate 20% of load on core 0 for 20 seconds run: :: 
 	
-	./CpuLoadGenerator.py -l <setpoint> -d <duration>
+	./CpuLoadGenerator.py -l 0.2 -d 20 -c 0
 
-where **duration** sets the time duration of the script in seconds and **setpoint** sets the percentage of CPU load to generate.
+To enable real time plot run : :: 
+	
+	./CpuLoadGenerator.py -p 1
+	
+To generate load on core 0 and core 1 : :: 
+	
+	./CpuLoadGenerator.py -c 1 | ./CpuLoadGenerator.py -c 0
