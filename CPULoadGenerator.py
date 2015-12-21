@@ -3,12 +3,10 @@
 #Authors: Gaetano Carlucci
 #         Giuseppe Cofano
 
-import os, psutil,math
+import os, psutil
 import threading
 import time
-
 import numpy as np
-from collections import deque
 import matplotlib.pyplot as plt
 from twisted.python import usage
 
