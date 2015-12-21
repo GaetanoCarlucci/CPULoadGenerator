@@ -4,6 +4,7 @@
 #         Giuseppe Cofano
 
 import os, psutil
+import multiprocessing
 import threading
 import time
 import numpy as np
@@ -16,20 +17,22 @@ class Options(usage.Options):
     """
     optParameters = [
             ["cpuLoad", "l", 0.2, "Cpu Target Load", float],
-            ["duration", "d", 5, "Duration", int],
-            ["plot", "p" , 1, "Enable Plot", int]
+            ["duration", "d", 10, "Duration", int],
+            ["plot", "p" , 1, "Enable Plot", int],
+            ["cpu", "c" , 0, "Select the CPU on which generate the load", int]
         ]
         
 class MonitorThread(threading.Thread):
     """
        Monitors the CPU status
     """
-    def __init__(self):
+    def __init__(self, cpu):
         self.interval = 0.1; # sample time interval
         self.sample = 0; # cpu load measurement sample
         self.cpu = 0; # cpu load filtered
         self.running = 1; # thread status
         self.alpha = 0.1; # filter coefficient
+        self.cpu = cpu
         # self.cpu_log = list() 
         super(MonitorThread, self).__init__()
         
@@ -38,7 +41,7 @@ class MonitorThread(threading.Thread):
         
     def run(self):
         p = psutil.Process(os.getpid())
-        p.set_cpu_affinity([0]) #the process is forced to run only on CPU 0: it can be extended
+        p.set_cpu_affinity([self.cpu]) #the process is forced to run only on the selected CPU
         while self.running:
             self.sample = p.get_cpu_percent(interval=self.interval)
             self.cpu = self.alpha * self.sample + (1-self.alpha)*self.cpu # first order filter on the measurement samples
@@ -93,7 +96,7 @@ class realTimePlot():
     """
         Plots the CPU load
     """
-    def __init__(self, duration):
+    def __init__(self, duration, cpu):
         plt.axis([0, duration, 0, 100])
         plt.ion()
         plt.show()
@@ -104,7 +107,7 @@ class realTimePlot():
         self.xdata = [0]
         self.line_target, = plt.plot(self.y_target)
         self.line_load, = plt.plot(self.y_load)
-        plt.legend([self.line_target, self.line_load], ["Target CPU", "CPU [0] Load"])
+        plt.legend([self.line_target, self.line_load], ["Target CPU", "CPU [%d] Load" % (cpu)])
         self.ts_start = time.time()
 
     def plotSample(self, sample, target):
@@ -140,9 +143,13 @@ if __name__ == "__main__":
         if options['plot'] != 0 and options['plot'] != 1: 
             print "plot can be enabled 1 or disabled 0"
             sys.exit(1)
+        if options['cpu'] > multiprocessing.cpu_count(): 
+            print "You have only %d cores on your machine" % (multiprocessing.cpu_count())
+            sys.exit(1)
+            
 
                 
-    monitor = MonitorThread()       
+    monitor = MonitorThread(options['cpu'])       
     monitor.start()
 
     control = ControllerThread()
@@ -152,7 +159,7 @@ if __name__ == "__main__":
     start_time = time.time()
 
     if options['plot']:
-       graph = realTimePlot(options['duration'])
+       graph = realTimePlot(options['duration'], options['cpu'])
 
     
     while (time.time() - start_time) < options['duration']:
