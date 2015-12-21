@@ -7,7 +7,7 @@ The script takes in input the desired CPU load, the duration of the experiment, 
 
 Usage
 -------------
-Install matplotlib: it allows to monitor the status of CPU 0: ::
+Install matplotlib: it allows real time plot of CPU status: ::
 
 	sudo apt-get install python-matplotlib
 
