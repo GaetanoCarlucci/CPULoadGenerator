@@ -18,7 +18,7 @@ class Options(usage.Options):
     """
     optParameters = [
             ["CPU load", "l", 0.2, None, float],
-            ["duration", "d", 10, None, float],
+            ["duration", "d", 20, None, float],
         ]
         
 class MonitorThread(threading.Thread):
@@ -55,7 +55,7 @@ class ControllerThread(threading.Thread):
         self.sleepTime = 0.0; # this is controller output: determines the sleep time to achieve the requested CPU load
         self.CT = 0.20;    # target CPU load should be provided as input 
         self.cpu = 0;   # current CPU load returned from the Monitor thread
-        self.ki = -1;   # integral constant of th PI regulator (the plant is an inverter)
+        self.ki = -2;   # integral constant of th PI regulator (the plant is an inverter)
         self.kp = -0.5; # proportional constant of th PI regulator (the plant is an inverter)
         self.int_err = 0;  # integral error
         self.last_ts = time.time();  # last sampled time
@@ -90,25 +90,36 @@ class ControllerThread(threading.Thread):
               self.sleepTime = 0;
               self.int_err = self.int_err - self.err*samp_int
 
-class realTimeplot():
-
-    def __init__(self):
-        plt.axis([0, 100, -10, 10])
+class realTimePlot():
+    """
+        Plots the CPU load
+    """
+    def __init__(self, duration):
+        plt.axis([0, duration, 0, 100])
         plt.ion()
         plt.show()
-        ydata = [0]
-        line, = plt.plot(ydata)
-        ts_start = time.time()
+        plt.xlabel('Time(sec)')
+        plt.ylabel('%')
+        self.y_load = [0]
+        self.y_target = [0]
+        self.xdata = [0]
+        self.line_target, = plt.plot(self.y_target)
+        self.line_load, = plt.plot(self.y_load)
+        plt.legend([self.line_target, self.line_load], ["Target CPU", "CPU [0] Load"])
+        self.ts_start = time.time()
 
-    def plotSample(time,sample):
-        p_x = int(int(time.time())-int(ts_start))
-        p_y = sample # keeps getting generated in the loop code
-        ydata.append(p_y)
-        line.set_xdata(np.arange(len(ydata)))
-        line.set_ydata(ydata)
+    def plotSample(self, sample, target):
+        p_x = time.time() - self.ts_start
+        p_load = sample
+        p_target = target 
+        self.y_load.append(p_load)
+        self.y_target.append(p_target)
+        self.xdata.append(p_x)
+        self.line_target.set_xdata(self.xdata)
+        self.line_target.set_ydata(self.y_target)
+        self.line_load.set_xdata(self.xdata)
+        self.line_load.set_ydata(self.y_load)
         plt.draw()
-        #time.sleep(0.05)
-              
                
 if __name__ == "__main__":
 
@@ -132,25 +143,13 @@ if __name__ == "__main__":
     control = ControllerThread()
     control.start()
     control.setCpuTarget(options['CPU load'])
-    last_ts = time.time()
 
-    #a1 = deque([0]*SAMPLES)
-    #target = deque([0]*SAMPLES)
-    #tempoReale = deque([0]*SAMPLES)
-        
-    #x = plt.axes(xlim=(0, options['duration']), ylim=(0, 100))
+    start_time = time.time()
 
-    #line1, = plt.plot(a1)
-    #line2, = plt.plot(target)
-    #plt.ion()
-    #plt.ylim([0,100])
-    #plt.show()
-    tempo = 0;
+    graph = realTimePlot(options['duration'])
 
-    #plt.xlabel('Time(sec)')
-    #plt.ylabel('CPU load [0] %')
     
-    while tempo < options['duration']:
+    while (time.time() - start_time) < options['duration']:
 
         for i in range(1,2):
            pr = 213123 + 324234 * 23423423
@@ -159,25 +158,7 @@ if __name__ == "__main__":
         sleep_time = control.getSleepTime()
         time.sleep(sleep_time)
         
-        ts = time.time()
-        delta = ts - last_ts
-        last_ts = ts
-        tempo += delta
-
-        graph = realTimeplot()
-        graph.plotSample(control.getCpuTarget()*100)
-
-       # a1.appendleft(monitor.getCpuLoad())
-      #  target.appendleft(control.getCpuTarget()*100)
-      #  tempoReale.appendleft(tempo)
-      #  a1.pop()
-     #   target.pop()
-     #   tempoReale.pop()
-     #   line1.set_ydata(a1)
-      #  line1.set_xdata(tempoReale)
-      #  line2.set_xdata(tempoReale)
-     #   line2.set_ydata(target)
-    #    plt.draw()
+        graph.plotSample(monitor.getCpuLoad(),control.getCpuTarget()*100)
 
     monitor.running = 0;
     control.running = 0;
