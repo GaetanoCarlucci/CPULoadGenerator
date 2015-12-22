@@ -170,7 +170,7 @@ if __name__ == "__main__":
 
         control.setCpu(monitor.getCpuLoad())
         sleep_time = control.getSleepTime()
-        time.sleep(sleep_time)
+        time.sleep(sleep_time) # controller actuation
         
         if options['plot']:
             graph.plotSample(monitor.getCpuLoad(),control.getCpuTarget()*100)
