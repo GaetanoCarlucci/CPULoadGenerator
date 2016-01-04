@@ -92,6 +92,37 @@ class ControllerThread(threading.Thread):
               self.sleepTime = 0;
               self.int_err = self.int_err - self.err*samp_int
 
+
+class Actuator():
+    """
+        Generates CPU load by tuning the sleep time
+    """
+    def __init__(self, controller, monitor, duration, plot):
+        self.running = 1;  # thread status
+        self.controller = controller
+        self.monitor = monitor
+        self.duration = duration
+        self.plot = plot
+        self.start_time = time.time()
+        if self.plot:
+            self.graph = realTimePlot(options['duration'], options['cpu'])
+           
+    def run(self):
+        # ControllerThread has to have the same sampling interval as MonitorThread
+        while (time.time() - self.start_time) <= options['duration']:
+       
+            for i in range(1,2):
+                pr = 213123 + 324234 * 23423423 # generates some load
+            
+            if self.plot:
+                self.graph.plotSample(monitor.getCpuLoad(),control.getCpuTarget()*100)
+            
+            self.controller.setCpu(self.monitor.getCpuLoad())
+            print self.monitor.getCpuLoad()
+            sleep_time = self.controller.getSleepTime()
+            time.sleep(sleep_time) # controller actuation
+            print (sleep_time)
+            
 class realTimePlot():
     """
         Plots the CPU load
@@ -157,23 +188,8 @@ if __name__ == "__main__":
     control.start()
     control.setCpuTarget(options['cpuLoad'])
 
-    start_time = time.time()
-
-    if options['plot']:
-       graph = realTimePlot(options['duration'], options['cpu'])
-
-    
-    while (time.time() - start_time) <= options['duration']:
-
-        for i in range(1,2):
-           pr = 213123 + 324234 * 23423423 # generates some load
-
-        control.setCpu(monitor.getCpuLoad())
-        sleep_time = control.getSleepTime()
-        time.sleep(sleep_time) # controller actuation
-        
-        if options['plot']:
-            graph.plotSample(monitor.getCpuLoad(),control.getCpuTarget()*100)
+    actuator = Actuator(control, monitor, options['duration'], options['plot'] )
+    actuator.run()
 
     monitor.running = 0;
     control.running = 0;
