@@ -10,7 +10,8 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 from Monitor import MonitorThread
-from Actuator import Actuator
+from Controller import ControllerThread
+from bareActuator import bareActuator
  
 if __name__ == "__main__":
    
@@ -21,31 +22,31 @@ if __name__ == "__main__":
     # this test aims at characterizing the CPU
     testing = 1
     if testing == 1:
-        cpuTest = np.arange(0.1,1,0.1)
+        sleepTimeTest = [0.1, 0.12, 0.15, 0.18, 0.2, 0.22, 0.25, 0.3, 0.35, 0.4, 0.45]
+        print sleepTimeTest
         data = {"x":[], "y":[]}
-        for cpuLoad in cpuTest:
+        for sleepTime in sleepTimeTest:
             monitor = MonitorThread(0)
             monitor.start()
-            actuator = Actuator(control, monitor, 5, 1, 0, cpuLoad)
-            data['x'].append(cpuLoad*100)
+            actuator = bareActuator(monitor, 5, 1, 0, 0)
+            actuator.setSleepTime(sleepTime)
+            data['x'].append(sleepTime)
             data['y'].append(actuator.run())
             actuator.close()
             monitor.running = 0
-            control.running = 0
             monitor.join()
-            control.join()
         
-        with open('data_without_PID.txt', 'w') as outfile:
+        with open('data.txt', 'w') as outfile:
             json.dump(data, outfile)
     else:
-        with open('data_without_PID.txt', 'r') as outfile:
+        with open('data.txt', 'r') as outfile:
             data = json.load(outfile)
 
     plt.figure()
     plt.scatter(data['x'], data['y'])
-    plt.xlabel('CPU Target Load (%)')
-    plt.ylabel('Sleep Time [ms]')
+    plt.ylabel('CPU Load (%)')
+    plt.xlabel('Sleep Time [ms]')
     plt.grid(True)
-    plt.savefig("Scatter_plot.jpg",dpi=100)
+    plt.savefig("Scatter_plot_without_PID.jpg",dpi=100)
     plt.show()
     

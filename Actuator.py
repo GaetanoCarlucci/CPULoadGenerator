@@ -2,7 +2,6 @@
 #         Giuseppe Cofano
 
 import time
-import matplotlib.pyplot as plt
 
 from Plot import realTimePlot
 
@@ -11,7 +10,6 @@ class Actuator():
         Generates CPU load by tuning the sleep time
     """
     def __init__(self, controller, monitor, duration, plot, cpu, target):
-        self.running = 1;  # thread status
         self.controller = controller
         self.monitor = monitor
         self.duration = duration
