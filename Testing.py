@@ -20,7 +20,7 @@ if __name__ == "__main__":
     ######################################################
     # testing activities
     # this test aims at characterizing the CPU
-    testing = 0
+    testing = 1
     if testing == 1:
         cpuTest = np.arange(0.1,1,0.1)
         data = {"x":[], "y":[]}

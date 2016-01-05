@@ -39,5 +39,5 @@ class realTimePlot():
         plt.draw()
 
     def close(self):
-        plt.savefig("%d %% Load" % (self.cpuT*100) + ".jpg",dpi=100)  
+        plt.savefig("%d%%-Target-Load" % (self.cpuT*100) + ".jpg",dpi=100)  
         plt.close();
