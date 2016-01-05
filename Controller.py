@@ -1,5 +1,3 @@
-#!/usr/bin/python
-
 #Authors: Gaetano Carlucci
 #         Giuseppe Cofano
 
@@ -34,8 +32,8 @@ class ControllerThread(threading.Thread):
        self.CT = CT
      
     def run(self):
-        # ControllerThread has to have the same sampling interval as MonitorThread
         while self.running:
+           # ControllerThread has to have the same sampling interval as MonitorThread
            time.sleep(0.1)
            self.err = self.CT - self.cpu*0.01  # computes the proportional error
            ts = time.time()

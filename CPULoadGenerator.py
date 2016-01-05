@@ -52,8 +52,9 @@ if __name__ == "__main__":
     control.start()
     control.setCpuTarget(options['cpuLoad'])
 
-    actuator = Actuator(control, monitor, options['duration'], options['plot'], options['cpu'])
+    actuator = Actuator(control, monitor, options['duration'], options['plot'], options['cpu'], options['cpuLoad'])
     actuator.run()
+    actuator.close()
 
     monitor.running = 0;
     control.running = 0;

@@ -1,26 +1,22 @@
-#!/usr/bin/python
-
 #Authors: Gaetano Carlucci
 #         Giuseppe Cofano
 
-import os, psutil
-import multiprocessing
-import threading
 import time
-import numpy as np
 import matplotlib.pyplot as plt
 
 class realTimePlot():
     """
         Plots the CPU load
     """
-    def __init__(self, duration, cpu):
+    def __init__(self, duration, cpu, target):
+        plt.figure()
         plt.axis([0, duration, 0, 100])
         plt.ion()
         plt.show()
         plt.xlabel('Time(sec)')
         plt.ylabel('%')
         self.y_load = [0]
+        self.cpuT = target;
         self.y_target = [0]
         self.xdata = [0]
         self.line_target, = plt.plot(self.y_target)
@@ -41,3 +37,7 @@ class realTimePlot():
         self.line_load.set_xdata(self.xdata)
         self.line_load.set_ydata(self.y_load)
         plt.draw()
+
+    def close(self):
+        plt.savefig("%d %% Load" % (self.cpuT*100) + ".jpg",dpi=100)  
+        plt.close();

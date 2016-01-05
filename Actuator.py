@@ -1,5 +1,3 @@
-#!/usr/bin/python
-
 #Authors: Gaetano Carlucci
 #         Giuseppe Cofano
 
@@ -12,28 +10,30 @@ class Actuator():
     """
         Generates CPU load by tuning the sleep time
     """
-    def __init__(self, controller, monitor, duration, plot, cpuT):
+    def __init__(self, controller, monitor, duration, plot, cpu, target):
         self.running = 1;  # thread status
         self.controller = controller
         self.monitor = monitor
         self.duration = duration
         self.plot = plot
-        self.cpuTarget = cpuT
         self.start_time = time.time()
         if self.plot:
-            self.graph = realTimePlot(self.duration, self.cpuTarget)
+            self.graph = realTimePlot(self.duration, cpu, target)
+
+    def close(self):
+        if self.plot:
+            self.graph.close()
            
     def run(self):
-        # ControllerThread has to have the same sampling interval as MonitorThread
         while (time.time() - self.start_time) <= self.duration:
        
             for i in range(1,2):
                 pr = 213123 + 324234 * 23423423 # generates some load
             
-            if self.plot:
-                self.graph.plotSample(self.monitor.getCpuLoad(), self.controller.getCpuTarget()*100)
-            
             self.controller.setCpu(self.monitor.getCpuLoad())
             sleep_time = self.controller.getSleepTime()
             time.sleep(sleep_time) # controller actuation
+
+            if self.plot:
+                self.graph.plotSample(self.monitor.getCpuLoad(), self.controller.getCpuTarget()*100)
         return sleep_time
