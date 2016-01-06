@@ -4,28 +4,34 @@
 #         Giuseppe Cofano
 
 
-from twisted.python import usage
 import json
 import numpy as np
 import matplotlib.pyplot as plt
 
+import sys
+sys.path.insert(0, 'utils')
+
 from Monitor import MonitorThread
+from Controller import ControllerThread
 from Actuator import Actuator
  
 if __name__ == "__main__":
    
     ######################################################
-    #             IDENTIFICATION TEST                    #
+    #             ASSISTED IDENTIFICATION TEST           #
     ######################################################
     # testing activities
     # this test aims at characterizing the CPU
     testing = 1
     if testing == 1:
-        cpuTest = np.arange(0.1,1,0.1)
+        cpuTest = np.linspace(0.1,0.9,9)
         data = {"x":[], "y":[]}
         for cpuLoad in cpuTest:
             monitor = MonitorThread(0)
             monitor.start()
+            control = ControllerThread()
+            control.start()
+            control.setCpuTarget(cpuLoad)
             actuator = Actuator(control, monitor, 5, 1, 0, cpuLoad)
             data['x'].append(cpuLoad*100)
             data['y'].append(actuator.run())
@@ -35,10 +41,10 @@ if __name__ == "__main__":
             monitor.join()
             control.join()
         
-        with open('data_without_PID.txt', 'w') as outfile:
+        with open('scatter_plot_data_assisted', 'w') as outfile:
             json.dump(data, outfile)
     else:
-        with open('data_without_PID.txt', 'r') as outfile:
+        with open('scatter_plot_data_assisted', 'r') as outfile:
             data = json.load(outfile)
 
     plt.figure()
@@ -46,6 +52,6 @@ if __name__ == "__main__":
     plt.xlabel('CPU Target Load (%)')
     plt.ylabel('Sleep Time [ms]')
     plt.grid(True)
-    plt.savefig("Scatter_plot.jpg",dpi=100)
+    plt.savefig("Assisted_scatter_plot.jpg",dpi=100)
     plt.show()
     

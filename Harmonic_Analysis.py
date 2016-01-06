@@ -4,11 +4,13 @@
 #         Giuseppe Cofano
 
 
-from twisted.python import usage
 import json
 import os.path
 import numpy as np
 import matplotlib.pyplot as plt
+
+import sys
+sys.path.insert(0, 'utils')
 
 from Monitor import MonitorThread
 from Controller import ControllerThread

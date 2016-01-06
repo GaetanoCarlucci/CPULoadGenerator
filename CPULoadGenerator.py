@@ -6,6 +6,9 @@
 import multiprocessing
 from twisted.python import usage
 
+import sys
+sys.path.insert(0, 'utils')
+
 from Monitor import MonitorThread
 from Controller import ControllerThread
 from Actuator import Actuator
