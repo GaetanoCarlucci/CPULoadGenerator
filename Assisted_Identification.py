@@ -13,7 +13,7 @@ sys.path.insert(0, 'utils')
 
 from Monitor import MonitorThread
 from Controller import ControllerThread
-from Actuator import Actuator
+from closedLoopActuator import closedLoopActuator
  
 if __name__ == "__main__":
    
@@ -25,6 +25,7 @@ if __name__ == "__main__":
     testing = 1
     if testing == 1:
         cpuTest = np.linspace(0.1,0.9,9)
+        #cpuTest = np.linspace(0.1,0.9,2)
         data = {"x":[], "y":[]}
         for cpuLoad in cpuTest:
             monitor = MonitorThread(0)
@@ -32,7 +33,7 @@ if __name__ == "__main__":
             control = ControllerThread()
             control.start()
             control.setCpuTarget(cpuLoad)
-            actuator = Actuator(control, monitor, 5, 1, 0, cpuLoad)
+            actuator = closedLoopActuator(control, monitor, 5, 1, 0, cpuLoad)
             data['x'].append(cpuLoad*100)
             data['y'].append(actuator.run())
             actuator.close()

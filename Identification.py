@@ -11,7 +11,7 @@ import sys
 sys.path.insert(0, 'utils')
 
 from Monitor import MonitorThread
-from bareActuator import bareActuator
+from openLoopActuator import openLoopActuator
  
 if __name__ == "__main__":
    
@@ -29,7 +29,7 @@ if __name__ == "__main__":
         for sleepTime in sleepTimeTest:
             monitor = MonitorThread(0)
             monitor.start()
-            actuator = bareActuator(monitor, 5, 1, 0, 0)
+            actuator = openLoopActuator(monitor, 5, 1, 0, 0)
             actuator.setSleepTime(sleepTime)
             data['x'].append(sleepTime)
             data['y'].append(actuator.run())
