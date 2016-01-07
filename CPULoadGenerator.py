@@ -48,10 +48,10 @@ if __name__ == "__main__":
             print "You have only %d cores on your machine" % (multiprocessing.cpu_count())
             sys.exit(1)
     
-    monitor = MonitorThread(options['cpu'])       
+    monitor = MonitorThread(options['cpu'], 0.1)
     monitor.start()
 
-    control = ControllerThread()
+    control = ControllerThread(0.1)
     control.start()
     control.setCpuTarget(options['cpuLoad'])
 

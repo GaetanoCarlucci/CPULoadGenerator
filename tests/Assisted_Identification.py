@@ -25,12 +25,12 @@ if __name__ == "__main__":
     testing = 1
     if testing == 1:
         cpuTest = np.linspace(0.1,0.9,9)
-        cpuTest = np.linspace(0.1,0.9,2)
+        #cpuTest = np.linspace(0.1,0.9,2)
         data = {"x":[], "y":[]}
         for cpuLoad in cpuTest:
-            monitor = MonitorThread(0)
+            monitor = MonitorThread(0, 0.1)
             monitor.start()
-            control = ControllerThread()
+            control = ControllerThread(0.1)
             control.start()
             control.setCpuTarget(cpuLoad)
             actuator = closedLoopActuator(control, monitor, 5, 1, 0, cpuLoad)

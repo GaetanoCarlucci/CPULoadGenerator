@@ -23,11 +23,10 @@ if __name__ == "__main__":
     testing = 1
     if testing == 1:
         sleepTimeTest = [0.02, 0.05, 0.1, 0.12, 0.15, 0.18, 0.2, 0.22, 0.25, 0.3, 0.35, 0.4, 0.45, 0.5, 0.55, 0.6]
-        sleepTimeTest = [0.02, 0.05]
-        print sleepTimeTest
+        #sleepTimeTest = [0.02, 0.05]
         data = {"x":[], "y":[]}
         for sleepTime in sleepTimeTest:
-            monitor = MonitorThread(0)
+            monitor = MonitorThread(0, 0.1)
             monitor.start()
             actuator = openLoopActuator(monitor, 5, 1, 0, 0)
             actuator.setSleepTime(sleepTime)

@@ -8,8 +8,9 @@ class ControllerThread(threading.Thread):
     """
         Controls the CPU status
     """
-    def __init__(self):
+    def __init__(self, interval):
         self.running = 1;  # thread status
+        self.sampling_interval = interval
         self.sleepTime = 0.0; # this is controller output: determines the sleep time to achieve the requested CPU load
         self.CT = 0.20;    # target CPU load should be provided as input 
         self.cpu = 0;   # current CPU load returned from the Monitor thread
@@ -34,7 +35,7 @@ class ControllerThread(threading.Thread):
     def run(self):
         while self.running:
            # ControllerThread has to have the same sampling interval as MonitorThread
-           time.sleep(0.1)
+           time.sleep(self.sampling_interval)
            self.err = self.CT - self.cpu*0.01  # computes the proportional error
            ts = time.time()
            
