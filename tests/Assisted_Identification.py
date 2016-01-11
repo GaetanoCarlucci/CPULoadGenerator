@@ -55,4 +55,3 @@ if __name__ == "__main__":
     plt.grid(True)
     plt.savefig("Assisted_scatter_plot.jpg",dpi=100)
     plt.show()
-    

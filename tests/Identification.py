@@ -22,13 +22,13 @@ if __name__ == "__main__":
     # this test aims at characterizing the CPU
     testing = 1
     if testing == 1:
-        sleepTimeTest = [0.02, 0.05, 0.1, 0.12, 0.15, 0.18, 0.2, 0.22, 0.25, 0.3, 0.35, 0.4, 0.45, 0.5, 0.55, 0.6]
+        sleepTimeTest = [0.001, 0.005, 0.01, 0.02, 0.03, 0.08, 0.1, 0.15, 0.2, 0.3, 0.4, 0.5]
         #sleepTimeTest = [0.02, 0.05]
         data = {"x":[], "y":[]}
         for sleepTime in sleepTimeTest:
             monitor = MonitorThread(0, 0.1)
             monitor.start()
-            actuator = openLoopActuator(monitor, 5, 1, 0, 0)
+            actuator = openLoopActuator(monitor, 10, 0, 0, 0)
             actuator.setSleepTime(sleepTime)
             data['x'].append(sleepTime)
             data['y'].append(actuator.run())
@@ -49,4 +49,3 @@ if __name__ == "__main__":
     plt.grid(True)
     plt.savefig("Scatter_plot.jpg",dpi=100)
     plt.show()
-    

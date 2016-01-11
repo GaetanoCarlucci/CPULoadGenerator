@@ -32,9 +32,15 @@ class openLoopActuator():
            
     def run(self):
         while (time.time() - self.start_time) <= self.duration:
+
+            interval = time.time() + 0.01
        
-            for i in range(1,2):
-                pr = 213123 + 324234 * 23423423 # generates some load
+            # generates some getCpuLoad for interval seconds
+            while (time.time() < interval):
+                pr = 213123  # generates some load
+                pr * pr
+                pr = pr + 1
+            
             
             time.sleep(self.sleep_time) # controller actuation
 
