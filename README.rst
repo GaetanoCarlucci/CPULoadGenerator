@@ -22,3 +22,5 @@ To disable real time plot run: ::
 To generate 20% of CPU load on core 0 and on core 1 run: :: 
 	
 	./CpuLoadGenerator.py -c 1 -l 0.2 | ./CpuLoadGenerator.py -c 0 -l 0.2
+
+![Example - 50% load on CPU core 0](https://github.com/GaetanoCarlucci/CPULoadGenerator/blob/master/50%25-Target-Load.jpg)
