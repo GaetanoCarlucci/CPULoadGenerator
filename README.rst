@@ -23,6 +23,8 @@ To generate 20% of CPU load on core 0 and on core 1 run: ::
 	
 	./CpuLoadGenerator.py -c 1 -l 0.2 | ./CpuLoadGenerator.py -c 0 -l 0.2
 
+
 .. image:: https://raw.githubusercontent.com/GaetanoCarlucci/CPULoadGenerator/master/50%25-Target-Load.jpg
     :alt: Example - 50% load on CPU core 0
+    :height: 400
     :align: center
