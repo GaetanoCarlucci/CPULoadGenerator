@@ -29,6 +29,4 @@ Dynamics example: 50% load generated on CPU core 0:
 
 .. image:: https://raw.githubusercontent.com/GaetanoCarlucci/CPULoadGenerator/master/50%25-Target-Load.jpg
     :alt: Example - 50% load on CPU core 0
-    :width: 50
-    :height: 50
     :align: center
