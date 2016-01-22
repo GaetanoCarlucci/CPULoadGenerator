@@ -21,7 +21,7 @@ class Options(usage.Options):
             ["cpuLoad", "l", 0.2, "Cpu Target Load", float],
             ["duration", "d", 10, "Duration", int],
             ["plot", "p" , 1, "Enable Plot", int],
-            ["cpu", "c" , 0, "Select the CPU on which generate the load", int]
+            ["cpu_core", "c" , 0, "Select the CPU on which generate the load", int]
         ]
                  
 if __name__ == "__main__":
@@ -44,18 +44,19 @@ if __name__ == "__main__":
         if options['plot'] != 0 and options['plot'] != 1: 
             print "plot can be enabled 1 or disabled 0"
             sys.exit(1)
-        if options['cpu'] >= multiprocessing.cpu_count(): 
+        if options['cpu_core'] >= multiprocessing.cpu_count(): 
             print "You have only %d cores on your machine" % (multiprocessing.cpu_count())
             sys.exit(1)
     
-    monitor = MonitorThread(options['cpu'], 0.1)
+    monitor = MonitorThread(options['cpu_core'], 0.1)
+    monitor.setSleepTime(0)
     monitor.start()
 
     control = ControllerThread(0.1)
     control.start()
     control.setCpuTarget(options['cpuLoad'])
 
-    actuator = closedLoopActuator(control, monitor, options['duration'], options['plot'], options['cpu'], options['cpuLoad'])
+    actuator = closedLoopActuator(control, monitor, options['duration'], options['cpu_core'], options['cpuLoad'], options['plot'])
     actuator.run()
     actuator.close()
 
