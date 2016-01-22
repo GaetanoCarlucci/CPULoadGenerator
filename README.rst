@@ -15,9 +15,9 @@ To generate 20% of load on core 0 for 20 seconds run: ::
 	
 	./CpuLoadGenerator.py -l 0.2 -d 20 -c 0
 
-To disable real time plot run: :: 
+To enable real time plot run: :: 
 	
-	./CpuLoadGenerator.py -p 0
+	./CpuLoadGenerator.py -p 1
 	
 To generate 20% of CPU load on core 0 and on core 1 run: :: 
 	
