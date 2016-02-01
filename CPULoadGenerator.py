@@ -49,7 +49,6 @@ if __name__ == "__main__":
             sys.exit(1)
     
     monitor = MonitorThread(options['cpu_core'], 0.1)
-    monitor.setSleepTime(0)
     monitor.start()
 
     control = ControllerThread(0.1)

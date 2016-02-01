@@ -12,11 +12,11 @@ class ControllerThread(threading.Thread):
         self.running = 1;  # thread status
         self.sampling_interval = interval
         self.period = 0.1 # actuation period  in seconds
-        self.sleepTime = 0.05; # this is controller output: determines the sleep time to achieve the requested CPU load
+        self.sleepTime = 0.02; # this is controller output: determines the sleep time to achieve the requested CPU load
         self.alpha = 0.2; # filter coefficient
         self.CT = 0.20;  # target CPU load should be provided as input 
-        self.cpu = 50;   # current CPU load returned from the Monitor thread
-        self.cpuPeriod = 0.00;
+        self.cpu = 0;   # current CPU load returned from the Monitor thread
+        self.cpuPeriod = 0.03;
         if ki is None:
           self.ki = 0.2 #-0.005;   # integral constant of th PI regulator (the plant is an inverter)
         if kp is None:
