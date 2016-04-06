@@ -37,8 +37,8 @@ if __name__ == "__main__":
         actuator.run_sequence(cpuSequence)
         
         actuator.close()
-        monitor.running = 0;
-        control.running = 0;
+        monitor.running = 0
+        control.running = 0
         dynamics =  monitor.getDynamics()
        
         monitor.join()
