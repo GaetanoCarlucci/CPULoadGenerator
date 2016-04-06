@@ -30,14 +30,14 @@ if __name__ == "__main__":
 
         control = ControllerThread(0.1)
         monitor = MonitorThread(0, 0.1)
-        actuator = closedLoopActuator(control, monitor, len(cpuSequence) * stepPeriod, 0, 0, dynamics_plot_online)
+        actuator = closedLoopActuator(control, monitor, len(cpuSequence) * stepPeriod, 0, 1, dynamics_plot_online)
 
         monitor.start()
         control.start()
         actuator.run_sequence(cpuSequence)
         
         actuator.close()
-        monitor.running = 0
+        monitor.running = 0;
         control.running = 0;
         dynamics =  monitor.getDynamics()
        

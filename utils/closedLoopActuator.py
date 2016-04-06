@@ -34,7 +34,7 @@ class closedLoopActuator():
     def sendPlotSample(self):
         if self.plot:
             if (time.time() - self.last_plot_time) > 0.2:
-                self.graph.plotSample(self.controller.getCpu(), self.controller.getCpuTarget()*100)  
+                self.graph.plotSample(self.controller.getCpu(), self.controller.getCpuTarget()*100)
                 self.last_plot_time = time.time()
 
     def close(self):
@@ -49,7 +49,7 @@ class closedLoopActuator():
             pr * pr
             pr = pr + 1
 
-        time.sleep(sleep_time)            
+        time.sleep(sleep_time)
            
     def run(self):
         while (time.time() - self.start_time) <= self.duration:

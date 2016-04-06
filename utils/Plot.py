@@ -20,11 +20,11 @@ class realTimePlot():
         self.y_target = [0]
         self.xdata = [0]       
         self.line_load, = plt.plot(self.y_load)
+        self.line_target, = plt.plot(self.y_target)
         if target != 0:
-            self.line_target, = plt.plot(self.y_target)
             plt.legend([self.line_target, self.line_load], ["Target CPU", "CPU [%d] Load" % (cpu)], ncol=2)
         else:
-            plt.legend([self.line_load], ["CPU [%d] Load" % (cpu)], ncol=1)
+           plt.legend([self.line_load], ["CPU [%d] Load" % (cpu)], ncol=1)
         plt.grid(True)
         self.ts_start = time.time()
 
