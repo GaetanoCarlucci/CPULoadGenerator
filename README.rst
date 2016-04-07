@@ -5,11 +5,15 @@ This script allows to generate a fixed CPU load for a finite time period. To the
 The script takes in input the desired CPU load, the duration of the experiment, the cpu core on which generate the load.  The controller and the CPU monitor are implemented in two different threads.
 
 
-Usage
+Dependencies
 -------------
 Install matplotlib: it allows real time plot of CPU status: ::
 
 	sudo apt-get install python-matplotlib
+
+Usage
+-------------
+Install matplotlib: it allows real time plot of CPU status: ::
 
 To generate 20% of load on core 0 for 20 seconds run: :: 
 	
