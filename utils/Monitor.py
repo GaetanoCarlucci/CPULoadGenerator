@@ -40,9 +40,16 @@ class MonitorThread(threading.Thread):
     def run(self):
     	start_time = time.time()
         p = psutil.Process(os.getpid())
-        p.set_cpu_affinity([self.cpu_core]) #the process is forced to run only on the selected CPU
+        try:
+            p.set_cpu_affinity([self.cpu_core]) #the process is forced to run only on the selected CPU
+        except AttributeError:
+                p.cpu_affinity([self.cpu_core])
+            
         while self.running:
-            self.sample = p.get_cpu_percent(self.sampling_interval)
+            try:
+                self.sample = p.get_cpu_percent(self.sampling_interval)
+            except AttributeError:
+                self.sample = p.cpu_percent(self.sampling_interval)
             self.cpu = self.alpha * self.sample + (1 - self.alpha)*self.cpu # first order filter on the measurement samples
             #self.cpu_log.append(self.cpu)
             self.dynamics['time'].append(time.time() - start_time)
