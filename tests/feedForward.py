@@ -76,5 +76,5 @@ if __name__ == "__main__":
     ax2.set_ylim([0, 100])
     for tl in ax2.get_yticklabels():
         tl.set_color('r')
-    plt.savefig('FeedForward.jpg', dpi=100)
+    plt.savefig('FeedForward.png', dpi=100)
     plt.close()

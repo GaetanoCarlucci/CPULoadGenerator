@@ -60,9 +60,9 @@ if __name__ == "__main__":
                 plt.plot(dynamics['time'], dynamics['cpu'])
                 plt.ylabel('CPU Load (%)')
                 plt.xlabel('Time [ms]')
-                plt.title('Dynamics_sleep_time_%fs.jpg' % (sleepTime))
+                plt.title('Dynamics_sleep_time_%fs.png' % (sleepTime))
                 plt.grid(True)
-                plt.savefig('Dynamics_sleep_time_%fs.jpg' % (sleepTime),dpi=100)
+                plt.savefig('Dynamics_sleep_time_%fs.png' % (sleepTime),dpi=100)
                 plt.close()
         
         with open('scatter_plot_data', 'w') as outfile:
@@ -77,7 +77,7 @@ if __name__ == "__main__":
     plt.ylabel('CPU Load (%)')
     plt.xlabel('Sleep Time [ms]')
     plt.grid(True)
-    plt.savefig("Scatter_plot2.jpg",dpi=100)
+    plt.savefig("Scatter_plot2.png",dpi=100)
     plt.show()
 
     cpu_time = [ (period*x) for x in cpuSequence]
@@ -85,5 +85,5 @@ if __name__ == "__main__":
     plt.ylabel('CPU Load (%)')
     plt.xlabel('CPU fraction Time [ms]')
     plt.grid(True)
-    plt.savefig("Scatter_plot.jpg",dpi=100)
+    plt.savefig("Scatter_plot.png",dpi=100)
     plt.show()

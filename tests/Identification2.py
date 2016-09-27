@@ -62,5 +62,5 @@ if __name__ == "__main__":
     ax2.grid(True)
     for tl in ax2.get_yticklabels():
         tl.set_color('r')
-    plt.savefig('Identification.jpg', dpi=100)
+    plt.savefig('Identification.png', dpi=100)
     plt.close()
