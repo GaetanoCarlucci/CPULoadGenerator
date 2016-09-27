@@ -9,4 +9,4 @@ install:
   - pip install matplotlib
 script:
   - tests/PID.py
-  - tests//feedForward.py
+  - tests/feedForward.py
