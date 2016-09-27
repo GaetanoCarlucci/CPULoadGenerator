@@ -80,5 +80,5 @@ if __name__ == "__main__":
     plt.xlabel('Time [ms]')
     plt.title('PID Actuation')
     plt.grid(True)
-    plt.savefig('PID Actuation.jpg',dpi=100)
+    plt.savefig('PID Actuation.png',dpi=100)
     plt.close()
