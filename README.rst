@@ -1,4 +1,4 @@
-CPULoadGenerator [![Build Status](https://travis-ci.org/GaetanoCarlucci/CPULoadGenerator.svg?branch=master)](https://travis-ci.org/GaetanoCarlucci/CPULoadGenerator)
+CPULoadGenerator
 ================
 
 This script allows to generate a fixed CPU load for a finite time period. To the purpose, a PI controller is employed. 
@@ -11,7 +11,7 @@ Install matplotlib: it allows real time plot of CPU status: ::
 
 	sudo apt-get install python-matplotlib
 
-Install psutil:
+Install psutil: ::
 
 	sudo apt-get install python-psutil
 
