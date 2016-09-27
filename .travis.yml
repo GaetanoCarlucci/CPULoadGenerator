@@ -1,0 +1,12 @@
+language: python
+python:
+  - "2.7"
+  - "3.2"
+  - "3.3"
+  - "3.4"
+  - "pypy"
+install:
+  - pip install matplotlib
+script:
+  - tests/PID.py
+  - tests//feedForward.py.py
