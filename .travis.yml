@@ -8,7 +8,5 @@ python:
 install:
   - sudo apt-get install python-matplotlib
 script:
-  - ls
-  - pwd
   - tests/PID.py
   - tests/feedForward.py

@@ -9,7 +9,7 @@ import json
 import matplotlib.pyplot as plt
 
 import sys
-sys.path.insert(0, '../utils')
+sys.path.insert(0, os.system('pwd') + '../utils')
 
 from Monitor import MonitorThread
 from openLoopActuator import openLoopActuator
