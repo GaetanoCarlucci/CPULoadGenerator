@@ -1,5 +1,5 @@
  .. image:: https://travis-ci.org/GaetanoCarlucci/CPULoadGenerator.svg?branch=master
-:target: https://travis-ci.org/GaetanoCarlucci/CPULoadGenerator
+	:target: https://travis-ci.org/GaetanoCarlucci/CPULoadGenerator
 
 CPULoadGenerator
 ================
