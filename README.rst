@@ -1,3 +1,5 @@
+|travis-badge|_
+
 .. |travis-badge| image:: https://travis-ci.org/GaetanoCarlucci/CPULoadGenerator.svg?branch=master
 .. _travis-badge: https://travis-ci.org/GaetanoCarlucci/CPULoadGenerator
 
