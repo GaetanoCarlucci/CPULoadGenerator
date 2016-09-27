@@ -4,9 +4,8 @@ python:
   - "3.2"
   - "3.3"
   - "3.4"
-  - "pypy"
 install:
-  - pip install matplotlib
+  - pip install --user matplotlib
 script:
   - tests/PID.py
   - tests/feedForward.py
