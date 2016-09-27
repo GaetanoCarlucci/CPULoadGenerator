@@ -8,7 +8,8 @@ import json
 import matplotlib.pyplot as plt
 
 import sys
-sys.path.insert(0, os.system('pwd') + '../utils')
+import os
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)) + '/../utils')
 
 from Monitor import MonitorThread
 from Controller import ControllerThread
