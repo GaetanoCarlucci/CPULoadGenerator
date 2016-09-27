@@ -7,6 +7,7 @@ python:
   - "3.4"
 install:
   - sudo apt-get install python-matplotlib
+  - sudo apt-get install python-psutil
 script:
   - tests/PID.py
   - tests/feedForward.py
