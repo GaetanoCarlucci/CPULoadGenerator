@@ -10,7 +10,7 @@ The script takes in input the desired CPU load, the duration of the experiment, 
 
 Dependencies
 -------------
-Install matplotlib: it allows real time plot of CPU status: ::
+Install matplotlib for real time plot of CPU status: ::
 
 	sudo apt-get install python-matplotlib
 
@@ -20,8 +20,6 @@ Install psutil: ::
 
 Usage
 -------------
-Install matplotlib: it allows real time plot of CPU status: ::
-
 To generate 20% of load on core 0 for 20 seconds run: :: 
 	
 	./CpuLoadGenerator.py -l 0.2 -d 20 -c 0
