@@ -35,6 +35,7 @@ To generate 20% of CPU load on core 0 and on core 1 run: ::
 Example
 -------------
 Dynamics example: 50% load generated on CPU core 0:
+
 	./CPULoadGenerator.py -l 0.5 -d 20 -p 1
 
 .. image:: https://raw.githubusercontent.com/GaetanoCarlucci/CPULoadGenerator/master/50%25-Target-Load.jpg
