@@ -26,15 +26,15 @@ Usage
 -------------
 To generate 20% of load on core 0 for 20 seconds run: :: 
 	
-	./CpuLoadGenerator.py -l 0.2 -d 20 -c 0
+	./CPULoadGenerator.py -l 0.2 -d 20 -c 0
 
 To enable real time plot run: :: 
 	
-	./CpuLoadGenerator.py -p 1
+	./CPULoadGenerator.py -p 1
 	
 To generate 20% of CPU load on core 0 and on core 1 run: :: 
 	
-	./CpuLoadGenerator.py -c 1 -l 0.2 | ./CpuLoadGenerator.py -c 0 -l 0.2
+	./CPULoadGenerator.py -c 1 -l 0.2 | ./CPULoadGenerator.py -c 0 -l 0.2
 
 Example
 -------------
