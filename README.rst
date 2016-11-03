@@ -17,6 +17,10 @@ Install matplotlib for real time plot of CPU status: ::
 Install psutil: ::
 
 	sudo apt-get install python-psutil
+	
+Other dependencies: ::
+
+        sudo apt-get install python-twisted
 
 Usage
 -------------
