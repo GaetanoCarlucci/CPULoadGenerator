@@ -1,11 +1,9 @@
 CPULoadGenerator
 ================
-|travis-badge|_
+|travis-badge|_ |mit-badge|_
 
 .. |travis-badge| image:: https://travis-ci.org/GaetanoCarlucci/CPULoadGenerator.svg?branch=master
 .. _travis-badge: https://travis-ci.org/GaetanoCarlucci/CPULoadGenerator
-
-|mit-badge|_
 
 .. |mit-badge| image:: https://img.shields.io/:license-mit-green.svg?style=flat
 .. _mit-badge: http://opensource.org/licenses/MIT
