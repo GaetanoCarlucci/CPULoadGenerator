@@ -5,6 +5,11 @@ CPULoadGenerator
 .. |travis-badge| image:: https://travis-ci.org/GaetanoCarlucci/CPULoadGenerator.svg?branch=master
 .. _travis-badge: https://travis-ci.org/GaetanoCarlucci/CPULoadGenerator
 
+|mit-badge|_
+
+.. |mit-badge| image:: http://img.shields.io/:license-mit-green.svg?style=flat
+.. _mit-badge: http://opensource.org/licenses/MIT
+
 This script allows to generate a fixed CPU load for a finite time period. To the purpose, a PI controller is employed. 
 The script takes in input the desired CPU load, the duration of the experiment, the cpu core on which generate the load.  The controller and the CPU monitor are implemented in two different threads.
 
