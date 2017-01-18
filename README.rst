@@ -7,7 +7,7 @@ CPULoadGenerator
 
 |mit-badge|_
 
-.. |mit-badge| image:: http://img.shields.io/:license-mit-green.svg?style=flat
+.. |mit-badge| image:: https://img.shields.io/:license-mit-green.svg?style=flat
 .. _mit-badge: http://opensource.org/licenses/MIT
 
 This script allows to generate a fixed CPU load for a finite time period. To the purpose, a PI controller is employed. 
