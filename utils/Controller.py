@@ -18,9 +18,9 @@ class ControllerThread(threading.Thread):
         self.cpu = 0;   # current CPU load returned from the Monitor thread
         self.cpuPeriod = 0.03;
         if ki is None:
-          self.ki = 0.2 #-0.005;   # integral constant of th PI regulator (the plant is an inverter)
+          self.ki = 0.2   # integral constant of th PI regulator 
         if kp is None:
-          self.kp = 0.02  #1 #-0.05; # proportional constant of th PI regulator (the plant is an inverter)
+          self.kp = 0.02  # proportional constant of th PI regulator
         self.int_err = 0;  # integral error
         self.last_ts = time.time();  # last sampled time
         super(ControllerThread, self).__init__()
