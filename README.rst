@@ -1,4 +1,4 @@
-CPULoadGenerator
+CPU Load Generator
 ================
 |travis-badge|_ |mit-badge|_
 
