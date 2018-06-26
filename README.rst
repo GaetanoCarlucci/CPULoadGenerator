@@ -13,17 +13,29 @@ The script takes in input the desired CPU load, the duration of the experiment a
 
 Dependencies
 -------------
-Install matplotlib for real time plot of CPU status: ::
 
-	sudo apt-get install python-matplotlib
+This script uses Python 3.6 and requires the following additional libraries:
 
-Install psutil: ::
+- matplotlib
+- psutil
+- twisted
 
-	sudo apt-get install python-psutil
-	
-Other dependencies: ::
+To get started, first install the virtualenv, then create and activate a Python virtualenv in the project root directory: .. highlight:: bash
 
-        sudo apt-get install python-twisted
+    $ cd CPULoadGenerator/
+    $ sudo apt install virtualenv
+    $ virtualenv --python=python3.6 ./venv
+    $ . venv/bin/activate
+    (venv) $
+
+Finally, install the dependencies listed in requirements.txt: .. highlight:: bash
+
+    (venv) $ pip install -r requirements.txt
+
+Alternatively, install dependencies system-wide using apt: .. highlight:: bash
+
+    $ sudo apt install python3-matplotlib python3-psutil python3-twisted
+
 
 Usage
 -------------
