@@ -63,6 +63,6 @@ Dynamics example: 50% load generated on CPU core 0: ::
 	
 	./CPULoadGenerator.py -l 0.5 -d 20 -p 1
 
-.. image:: https://raw.githubusercontent.com/GaetanoCarlucci/CPULoadGenerator/master/50%25-Target-Load.png
+.. image:: https://raw.githubusercontent.com/molguin92/CPULoadGenerator/master/50%25-Target-Load.png
     :alt: Example - 50% load on CPU core 0
     :align: center
