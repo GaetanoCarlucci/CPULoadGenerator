@@ -22,14 +22,15 @@ class closedLoopActuator():
         if self.plot:
             self.graph = realTimePlot(self.duration, cpu_core, target)
 
-    def generate_load(self, sleep_time):
-        interval = time.time() + self.cycle - sleep_time
-        # generates some getCpuLoad for interval seconds
-        while (time.time() < interval):
-            pr = 213123  # generates some load
-            pr * pr
-            pr = pr + 1
-        time.sleep(sleep_time) # controller actuation
+    # Redefined further down!
+    # def generate_load(self, sleep_time):
+    #     interval = time.time() + self.cycle - sleep_time
+    #     # generates some getCpuLoad for interval seconds
+    #     while (time.time() < interval):
+    #         pr = 213123  # generates some load
+    #         pr * pr
+    #         pr = pr + 1
+    #     time.sleep(sleep_time) # controller actuation
 
     def sendPlotSample(self):
         if self.plot:
