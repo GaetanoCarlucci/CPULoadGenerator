@@ -20,7 +20,7 @@ This script uses Python 3.6 and requires the following additional libraries:
 - psutil
 - twisted
 
-To get started, first install the virtualenv, then create and activate a Python virtualenv in the project root directory: .. highlight:: bash
+To get started, first install the virtualenv, then create and activate a Python virtualenv in the project root directory: .. code:: bash
 
     $ cd CPULoadGenerator/
     $ sudo apt install virtualenv
@@ -28,11 +28,11 @@ To get started, first install the virtualenv, then create and activate a Python 
     $ . venv/bin/activate
     (venv) $
 
-Finally, install the dependencies listed in requirements.txt: .. highlight:: bash
+Finally, install the dependencies listed in requirements.txt: .. code:: bash
 
     (venv) $ pip install -r requirements.txt
 
-Alternatively, install dependencies system-wide using apt: .. highlight:: bash
+Alternatively, install dependencies system-wide using apt: .. code:: bash
 
     $ sudo apt install python3-matplotlib python3-psutil python3-twisted
 
