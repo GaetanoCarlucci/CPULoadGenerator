@@ -3,7 +3,7 @@
 
 import time
 
-from utils.Plot import realTimePlot
+from utils.Plot import RealTimePlot
 
 
 class ClosedLoopActuator:
@@ -22,7 +22,7 @@ class ClosedLoopActuator:
         self.last_plot_time = time.time()
         self.start_time = time.time()
         if self.plot:
-            self.graph = realTimePlot(self.duration, cpu_core, target)
+            self.graph = RealTimePlot(self.duration, cpu_core, target)
 
     # Redefined further down!
     # def generate_load(self, sleep_time):
@@ -37,8 +37,8 @@ class ClosedLoopActuator:
     def send_plot_sample(self):
         if self.plot:
             if (time.time() - self.last_plot_time) > 0.2:
-                self.graph.plotSample(self.controller.get_cpu(),
-                                      self.controller.get_cpu_target() * 100)
+                self.graph.plot_sample(self.controller.get_cpu(),
+                                       self.controller.get_cpu_target() * 100)
                 self.last_plot_time = time.time()
 
     def close(self):
