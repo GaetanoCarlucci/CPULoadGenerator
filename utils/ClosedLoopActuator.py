@@ -48,14 +48,15 @@ class ClosedLoopActuator:
     def generate_load(self, sleep_time):
         interval = time.time() + self.period - sleep_time
         # generates some getCpuLoad for interval seconds
-        while (time.time() < interval):
+        while time.time() < interval:
             pr = 213123  # generates some load
-            pr * pr
+            _ = pr * pr
             pr = pr + 1
 
         time.sleep(sleep_time)
 
     def run(self):
+        sleep_time = 0
         while (time.time() - self.start_time) <= self.duration:
             self.controller.setCpu(self.monitor.getCpuLoad())
             sleep_time = self.controller.getSleepTime()
@@ -65,10 +66,10 @@ class ClosedLoopActuator:
 
     def run_sequence(self, sequence):
         for cpuTarget in sequence:
-            stepPeriod = time.time() + 4
+            step_period = time.time() + 4
             self.controller.setCpuTarget(cpuTarget)
             self.monitor.setCPUTarget(cpuTarget)
-            while (time.time() < stepPeriod):
+            while time.time() < step_period:
                 self.controller.setCpu(self.monitor.getCpuLoad())
                 sleep_time = self.controller.getSleepTime()
                 self.generate_load(sleep_time)
