@@ -7,11 +7,11 @@ import multiprocessing
 from twisted.python import usage
 
 import sys
-sys.path.insert(0, 'utils')
+# sys.path.insert(0, 'utils')
 
-from Monitor import MonitorThread
-from Controller import ControllerThread
-from closedLoopActuator import closedLoopActuator
+from utils.Monitor import MonitorThread
+from utils.Controller import ControllerThread
+from utils.closedLoopActuator import closedLoopActuator
 
 class Options(usage.Options):
     """
