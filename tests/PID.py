@@ -13,7 +13,7 @@ import os
 
 from utils.Monitor import MonitorThread
 from utils.Controller import ControllerThread
-from utils.closedLoopActuator import closedLoopActuator
+from utils.ClosedLoopActuator import ClosedLoopActuator
 
 if __name__ == "__main__":
    
@@ -31,7 +31,7 @@ if __name__ == "__main__":
 
         control = ControllerThread(0.1)
         monitor = MonitorThread(0, 0.1)
-        actuator = closedLoopActuator(control, monitor, len(cpuSequence) * stepPeriod, 0, 1, dynamics_plot_online)
+        actuator = ClosedLoopActuator(control, monitor, len(cpuSequence) * stepPeriod, 0, 1, dynamics_plot_online)
 
         monitor.start()
         control.start()
