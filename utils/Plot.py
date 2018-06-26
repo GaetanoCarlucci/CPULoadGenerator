@@ -47,4 +47,4 @@ class realTimePlot():
             name = "%d%%-Target-Load" % (self.cpuT*100)+ ".png"
             # TODO: add option to change format
             plt.savefig(name, dpi=100)
-        plt.close();
+        plt.close()
