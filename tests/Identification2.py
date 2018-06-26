@@ -13,7 +13,7 @@ import os
 # sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)) + '/../utils')
 
 from utils.Monitor import MonitorThread
-from utils.openLoopActuator import openLoopActuator
+from utils.OpenLoopActuator import OpenLoopActuator
  
 if __name__ == "__main__":
    
@@ -32,7 +32,7 @@ if __name__ == "__main__":
         stepPeriod = 4
         monitor = MonitorThread(0, 0.1)
         monitor.start()
-        actuator = openLoopActuator(monitor, len(sleepTimeSequence) * stepPeriod, 0, dynamics_plot_online)
+        actuator = OpenLoopActuator(monitor, len(sleepTimeSequence) * stepPeriod, 0, dynamics_plot_online)
         actuator.run_sequence(sleepTimeSequence)
         
         monitor.running = 0

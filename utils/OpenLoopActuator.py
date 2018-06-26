@@ -1,32 +1,34 @@
-#Authors: Gaetano Carlucci
+# Authors: Gaetano Carlucci
 #         Giuseppe Cofano
 
 import time
 
 from utils.Plot import realTimePlot
 
-class openLoopActuator():
+
+class OpenLoopActuator:
     """
         Generates CPU load by tuning the sleep time
     """
+
     def __init__(self, monitor, duration, cpu_core, plot):
         self.sleep_time = 0.03
         self.monitor = monitor
         self.duration = duration
         self.plot = plot
-        self.period = 0.05 # actuation period  in seconds
+        self.period = 0.05  # actuation period  in seconds
         self.cpu_core = cpu_core
         if self.plot:
             self.graph = realTimePlot(self.duration, cpu_core, 0)
 
-    def setSleepTime(self, sleep_time):
+    def set_sleep_time(self, sleep_time):
         self.sleep_time = sleep_time
 
     def close(self):
         if self.plot:
             self.graph.close()
 
-    def checkSleepTime(self, sleep_time):
+    def check_sleep_time(self, sleep_time):
         if sleep_time > self.period:
             sleep_time = self.period
         if sleep_time < 0:
@@ -43,20 +45,20 @@ class openLoopActuator():
 
         time.sleep(sleep_time)
 
-    def sendPlotSample(self):
+    def send_plot_sample(self):
         if self.plot:
             self.graph.plotSample(self.monitor.get_cpu_load(), 0)
 
     def run(self):
-        duration  = time.time() + self.duration
+        duration = time.time() + self.duration
         while time.time() < duration:
-            self.generate_load(self.checkSleepTime(self.sleep_time))
-            self.sendPlotSample()
+            self.generate_load(self.check_sleep_time(self.sleep_time))
+            self.send_plot_sample()
 
-    def run_sequence(self, sequence):       
+    def run_sequence(self, sequence):
         for SleepTimeTarget in sequence:
-            stepPeriod = time.time() + 4
+            step_period = time.time() + 4
             self.monitor.set_sleep_time_target(SleepTimeTarget)
-            while time.time() < stepPeriod:
-                self.generate_load(self.checkSleepTime(SleepTimeTarget))
-                self.sendPlotSample()
+            while time.time() < step_period:
+                self.generate_load(self.check_sleep_time(SleepTimeTarget))
+                self.send_plot_sample()
