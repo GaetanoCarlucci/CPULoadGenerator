@@ -12,7 +12,7 @@ import sys
 
 from utils.Monitor import MonitorThread
 from utils.Controller import ControllerThread
-from utils.ClosedLoopActuator import ClosedLoopActuator
+from utils.closedLoopActuator import closedLoopActuator
 
 
 class Options(usage.Options):
@@ -60,7 +60,7 @@ if __name__ == "__main__":
     control.start()
     control.setCpuTarget(options['cpuLoad'])
 
-    actuator = ClosedLoopActuator(control, monitor, options['duration'],
+    actuator = closedLoopActuator(control, monitor, options['duration'],
                                   options['cpu_core'], options['cpuLoad'],
                                   options['plot'])
     actuator.run()
