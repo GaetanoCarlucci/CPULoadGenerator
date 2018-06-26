@@ -58,7 +58,7 @@ if __name__ == "__main__":
 
     control = ControllerThread(0.1)
     control.start()
-    control.setCpuTarget(options['cpuLoad'])
+    control.set_cpu_target(options['cpuLoad'])
 
     actuator = ClosedLoopActuator(control, monitor, options['duration'],
                                   options['cpu_core'], options['cpuLoad'],

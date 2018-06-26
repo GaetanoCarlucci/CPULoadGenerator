@@ -17,7 +17,7 @@ class ClosedLoopActuator:
         self.duration = duration
         self.plot = plot
         self.target = target
-        self.controller.setCpu(self.monitor.getCpuLoad())
+        self.controller.set_cpu(self.monitor.getCpuLoad())
         self.period = 0.05  # actuation period  in seconds
         self.last_plot_time = time.time()
         self.start_time = time.time()
@@ -37,8 +37,8 @@ class ClosedLoopActuator:
     def send_plot_sample(self):
         if self.plot:
             if (time.time() - self.last_plot_time) > 0.2:
-                self.graph.plotSample(self.controller.getCpu(),
-                                      self.controller.getCpuTarget() * 100)
+                self.graph.plotSample(self.controller.get_cpu(),
+                                      self.controller.get_cpu_target() * 100)
                 self.last_plot_time = time.time()
 
     def close(self):
@@ -58,8 +58,8 @@ class ClosedLoopActuator:
     def run(self):
         sleep_time = 0
         while (time.time() - self.start_time) <= self.duration:
-            self.controller.setCpu(self.monitor.getCpuLoad())
-            sleep_time = self.controller.getSleepTime()
+            self.controller.set_cpu(self.monitor.getCpuLoad())
+            sleep_time = self.controller.get_sleep_time()
             self.generate_load(sleep_time)
             self.send_plot_sample()
         return sleep_time
@@ -67,11 +67,11 @@ class ClosedLoopActuator:
     def run_sequence(self, sequence):
         for cpuTarget in sequence:
             step_period = time.time() + 4
-            self.controller.setCpuTarget(cpuTarget)
+            self.controller.set_cpu_target(cpuTarget)
             self.monitor.setCPUTarget(cpuTarget)
             while time.time() < step_period:
-                self.controller.setCpu(self.monitor.getCpuLoad())
-                sleep_time = self.controller.getSleepTime()
+                self.controller.set_cpu(self.monitor.getCpuLoad())
+                sleep_time = self.controller.get_sleep_time()
                 self.generate_load(sleep_time)
                 self.monitor.setSleepTime(sleep_time)
                 self.send_plot_sample()
