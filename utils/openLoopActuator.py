@@ -45,7 +45,7 @@ class openLoopActuator():
 
     def sendPlotSample(self):
         if self.plot:
-            self.graph.plotSample(self.monitor.getCpuLoad(), 0)
+            self.graph.plotSample(self.monitor.get_cpu_load(), 0)
 
     def run(self):
         duration  = time.time() + self.duration
@@ -56,7 +56,7 @@ class openLoopActuator():
     def run_sequence(self, sequence):       
         for SleepTimeTarget in sequence:
             stepPeriod = time.time() + 4
-            self.monitor.setSleepTimeTarget(SleepTimeTarget)
+            self.monitor.set_sleep_time_target(SleepTimeTarget)
             while (time.time() < stepPeriod):
                 self.generate_load(self.checkSleepTime(SleepTimeTarget))
                 self.sendPlotSample()

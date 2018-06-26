@@ -17,7 +17,7 @@ class ClosedLoopActuator:
         self.duration = duration
         self.plot = plot
         self.target = target
-        self.controller.set_cpu(self.monitor.getCpuLoad())
+        self.controller.set_cpu(self.monitor.get_cpu_load())
         self.period = 0.05  # actuation period  in seconds
         self.last_plot_time = time.time()
         self.start_time = time.time()
@@ -58,7 +58,7 @@ class ClosedLoopActuator:
     def run(self):
         sleep_time = 0
         while (time.time() - self.start_time) <= self.duration:
-            self.controller.set_cpu(self.monitor.getCpuLoad())
+            self.controller.set_cpu(self.monitor.get_cpu_load())
             sleep_time = self.controller.get_sleep_time()
             self.generate_load(sleep_time)
             self.send_plot_sample()
@@ -68,10 +68,10 @@ class ClosedLoopActuator:
         for cpuTarget in sequence:
             step_period = time.time() + 4
             self.controller.set_cpu_target(cpuTarget)
-            self.monitor.setCPUTarget(cpuTarget)
+            self.monitor.set_cpu_target(cpuTarget)
             while time.time() < step_period:
-                self.controller.set_cpu(self.monitor.getCpuLoad())
+                self.controller.set_cpu(self.monitor.get_cpu_load())
                 sleep_time = self.controller.get_sleep_time()
                 self.generate_load(sleep_time)
-                self.monitor.setSleepTime(sleep_time)
+                self.monitor.set_sleep_time(sleep_time)
                 self.send_plot_sample()

@@ -40,7 +40,7 @@ if __name__ == "__main__":
         actuator.close()
         monitor.running = 0
         control.running = 0
-        dynamics =  monitor.getDynamics()
+        dynamics =  monitor.get_dynamics()
        
         monitor.join()
         control.join()

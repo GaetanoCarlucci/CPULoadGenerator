@@ -37,7 +37,7 @@ if __name__ == "__main__":
         data = {"x":[], "y":[]}
         for sleepTime in sleepTimeTest:
             monitor = MonitorThread(0, 0.1)
-            monitor.setSleepTimeTarget(sleepTime)
+            monitor.set_sleep_time_target(sleepTime)
             monitor.start()
 
             actuator = openLoopActuator(monitor, 10, 0, dynamics_plot_online)
@@ -45,7 +45,7 @@ if __name__ == "__main__":
             actuator.run()
             
             monitor.running = 0
-            dynamics =  monitor.getDynamics()
+            dynamics =  monitor.get_dynamics()
             actuator.close()
             monitor.join()
 

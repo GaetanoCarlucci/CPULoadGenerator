@@ -36,7 +36,7 @@ if __name__ == "__main__":
         actuator.run_sequence(sleepTimeSequence)
         
         monitor.running = 0
-        dynamics =  monitor.getDynamics()
+        dynamics =  monitor.get_dynamics()
         actuator.close()
         monitor.join()
         
