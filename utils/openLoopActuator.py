@@ -36,9 +36,9 @@ class openLoopActuator():
     def generate_load(self, sleep_time):
         interval = time.time() + self.period - sleep_time
         # generates some getCpuLoad for interval seconds
-        while (time.time() < interval):
+        while time.time() < interval:
             pr = 213123  # generates some load
-            pr * pr
+            _ = pr * pr
             pr = pr + 1
 
         time.sleep(sleep_time)
@@ -49,7 +49,7 @@ class openLoopActuator():
 
     def run(self):
         duration  = time.time() + self.duration
-        while (time.time() < duration):
+        while time.time() < duration:
             self.generate_load(self.checkSleepTime(self.sleep_time))
             self.sendPlotSample()
 
@@ -57,6 +57,6 @@ class openLoopActuator():
         for SleepTimeTarget in sequence:
             stepPeriod = time.time() + 4
             self.monitor.set_sleep_time_target(SleepTimeTarget)
-            while (time.time() < stepPeriod):
+            while time.time() < stepPeriod:
                 self.generate_load(self.checkSleepTime(SleepTimeTarget))
                 self.sendPlotSample()
