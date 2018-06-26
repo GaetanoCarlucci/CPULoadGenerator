@@ -20,7 +20,7 @@ This script uses Python 3.6 and requires the following additional libraries:
 - psutil
 - twisted
 
-To get started, first install the virtualenv, then create and activate a Python virtualenv in the project root directory:
+To get started, first install Virtualenv, then create and activate a Python virtualenv in the project root directory:
 
 .. code:: bash
 
