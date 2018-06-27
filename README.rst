@@ -55,12 +55,15 @@ Examples
 
     ./CPULoadGenerator.py -l 0.65 -c 0 -c 1 -c 5
 
-3. Generate 12% load on cores 0 and 1, for 20.5 seconds, and then plot the load for each of the cores: ::
+3. Generate 55% load on core 0, 12% on core 3, until the program is interrupted through Ctrl-C: ::
+
+    ./CPULoadGenerator.py -c 0 -c 3 -l 0.55 -l 0.12
+
+4. Generate 12% load on cores 0 and 1, for 20.5 seconds, and then plot the load for each of the cores: ::
 
     ./CPULoadGenerator.py -l 0.12 -c 0 -c 1 -d 20.5 --plot
 
-
-4. Example graph of CPU load:
+5. Example graph of CPU load:
 
 .. image:: https://raw.githubusercontent.com/molguin92/CPULoadGenerator/python3_port_stable/50%25-Target-Load.png
     :alt: Example - 50% load on CPU core 0
