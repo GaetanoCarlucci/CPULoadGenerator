@@ -1,6 +1,6 @@
 CPU Load Generator
 ================
-|travis-badge|_ |mit-badge|_
+|travis-badge|_ |mit-badge|_ |made-with-python|_
 
 .. |travis-badge| image:: https://travis-ci.org/GaetanoCarlucci/CPULoadGenerator.svg?branch=master
 .. _travis-badge: https://travis-ci.org/GaetanoCarlucci/CPULoadGenerator
