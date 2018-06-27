@@ -12,7 +12,7 @@ CPU Load Generator
 .. _made-with-python: https://www.python.org/
 
 Python3 version
-**********************
+-------------
 This master branch refers to Python2.
 `Python3 <https://github.com/GaetanoCarlucci/CPULoadGenerator/tree/Python3/>`_ version branch.
 
@@ -21,7 +21,7 @@ The script takes in input the desired CPU load, the duration of the experiment a
 
 
 Dependencies
--------------
+**********************
 Install matplotlib for real time plot of CPU status: ::
 
 	sudo apt-get install python-matplotlib
@@ -35,7 +35,7 @@ Other dependencies: ::
         sudo apt-get install python-twisted
 
 Usage
--------------
+**********************
 To generate 20% of load on core 0 for 20 seconds run: :: 
 	
 	./CPULoadGenerator.py -l 0.2 -d 20 -c 0
@@ -49,7 +49,7 @@ To generate 20% of CPU load on core 0 and on core 1 run: ::
 	./CPULoadGenerator.py -c 1 -l 0.2 | ./CPULoadGenerator.py -c 0 -l 0.2
 
 Example
--------------
+**********************
 Dynamics example: 50% load generated on CPU core 0: ::
 	
 	./CPULoadGenerator.py -l 0.5 -d 20 -p 1
