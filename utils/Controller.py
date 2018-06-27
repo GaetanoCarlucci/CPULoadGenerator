@@ -1,7 +1,7 @@
 # Authors: Gaetano Carlucci
 #         Giuseppe Cofano
 
-from threading import Thread, RLock
+from threading import Thread, Event
 import time
 
 
@@ -12,9 +12,7 @@ class ControllerThread(Thread):
 
     def __init__(self, interval, ki=None, kp=None):
         # synchronization
-        self.lock = RLock()
-        self.running = False
-
+        self.shutdown_flag = Event()
 
         self.running = 1;  # thread status
         self.sampling_interval = interval
@@ -33,8 +31,7 @@ class ControllerThread(Thread):
         super(ControllerThread, self).__init__()
 
     def stop(self):
-        with self.lock:
-            self.running = False
+        self.shutdown_flag.set()
 
     def get_sleep_time(self):
         return self.sleepTime
@@ -57,14 +54,8 @@ class ControllerThread(Thread):
         self.CT = CT
 
     def run(self):
-        with self.lock:
-            self.running = True
-
-        while True:
-            with self.lock:
-                if not self.running:
-                    break
-
+        self.shutdown_flag.clear()
+        while not self.shutdown_flag.is_set():
             # ControllerThread has to have the same sampling interval as MonitorThread
             time.sleep(self.sampling_interval)
             self.err = self.CT - self.cpu * 0.01  # computes the proportional error

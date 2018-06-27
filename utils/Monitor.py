@@ -3,7 +3,7 @@
 
 import os
 import psutil
-from threading import Thread, RLock
+from threading import Thread, Event
 import time
 
 
@@ -14,8 +14,7 @@ class MonitorThread(Thread):
 
     def __init__(self, cpu_core, interval):
         # synchronization
-        self.lock = RLock()
-        self.running = False
+        self.shutdown_flag = Event()
 
         self.sampling_interval = interval;  # sample time interval
         self.sample = 0.5;  # cpu load measurement sample
@@ -31,8 +30,7 @@ class MonitorThread(Thread):
         super(MonitorThread, self).__init__()
 
     def stop(self):
-        with self.lock:
-            self.running = False
+        self.shutdown_flag.set()
 
     def get_cpu_load(self):
         return self.cpu
@@ -59,14 +57,8 @@ class MonitorThread(Thread):
         except AttributeError:
             p.cpu_affinity([self.cpu_core])
 
-        with self.lock:
-            self.running = True
-
-        while True:
-            with self.lock:
-                if not self.running:
-                    break
-
+        self.shutdown_flag.clear()
+        while not self.shutdown_flag.is_set():
             try:
                 self.sample = p.get_cpu_percent(self.sampling_interval)
             except AttributeError:
