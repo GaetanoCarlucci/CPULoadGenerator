@@ -23,7 +23,7 @@ class Options(usage.Options):
     """
     optParameters = [
         ["cpuLoad", "l", 0.2, "Cpu Target Load", float],
-        ["duration", "d", 10, "Duration", int],
+        ["duration", "d", -1, "Duration", int],
         ["plot", "p", 0, "Enable Plot", int],
         ["cpu_core", "c", 0, "Select the CPU on which generate the load", int]
     ]
@@ -50,9 +50,9 @@ if __name__ == "__main__":
         if options['cpuLoad'] < 0 or options['cpuLoad'] > 1:
             print("CPU target load out of the range [0,1]")
             sys.exit(1)
-        if options['duration'] < 0:
-            print("Invalid duration")
-            sys.exit(1)
+        # if options['duration'] < 0:
+        #     print("Invalid duration")
+        #     sys.exit(1)
         if options['plot'] != 0 and options['plot'] != 1:
             print("plot can be enabled 1 or disabled 0")
             sys.exit(1)
