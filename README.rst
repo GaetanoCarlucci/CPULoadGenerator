@@ -17,7 +17,8 @@ The script takes in input the desired CPU load, the duration of the experiment a
 
 Python3 version
 -------------
-This master branch refers to Python2. ::
+This master branch refers to Python2. 
+
 `Python3 <https://github.com/GaetanoCarlucci/CPULoadGenerator/tree/Python3/>`_ version branch.
 
 
