@@ -3,7 +3,7 @@
 
 import time
 
-from Plot import realTimePlot
+from utils.Plot import realTimePlot
 
 class openLoopActuator():
     """

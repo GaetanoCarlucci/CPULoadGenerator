@@ -21,7 +21,7 @@ class MonitorThread(threading.Thread):
         self.cpu_core = cpu_core
         self.dynamics = {"time":[], "cpu":[], "sleepTimeTarget":[], "cpuTarget":[],  "sleepTime":[],}
         super(MonitorThread, self).__init__()
-        
+
     def getCpuLoad(self):
         return self.cpu
 
@@ -35,22 +35,22 @@ class MonitorThread(threading.Thread):
         self.cpuTarget = cpuTarget
 
     def getDynamics(self):
-    	return self.dynamics
-        
+        return self.dynamics
+
     def run(self):
-    	start_time = time.time()
+        start_time = time.time()
         p = psutil.Process(os.getpid())
         try:
             p.set_cpu_affinity([self.cpu_core]) #the process is forced to run only on the selected CPU
         except AttributeError:
             p.cpu_affinity([self.cpu_core])
-            
+
         while self.running:
             try:
-               self.sample = p.get_cpu_percent(self.sampling_interval)
+                self.sample = p.get_cpu_percent(self.sampling_interval)
             except AttributeError:
-               self.sample = p.cpu_percent(self.sampling_interval)
-               
+                self.sample = p.cpu_percent(self.sampling_interval)
+
             self.cpu = self.alpha * self.sample + (1 - self.alpha)*self.cpu # first order filter on the measurement samples
             #self.cpu_log.append(self.cpu)
             self.dynamics['time'].append(time.time() - start_time)
