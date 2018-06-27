@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/env python
 
 #Authors: Gaetano Carlucci
 #         Giuseppe Cofano
@@ -10,10 +10,10 @@ import matplotlib.pyplot as plt
 
 import sys
 import os
-sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)) + '/../utils')
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)) + '/..')
 
-from Monitor import MonitorThread
-from openLoopActuator import openLoopActuator
+from utils.Monitor import MonitorThread
+from utils.openLoopActuator import openLoopActuator
  
 if __name__ == "__main__":
    

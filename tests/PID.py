@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/env python
 
 #Authors: Gaetano Carlucci
 #         Giuseppe Cofano
@@ -9,11 +9,11 @@ import matplotlib.pyplot as plt
 
 import sys
 import os
-sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)) + '/../utils')
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)) + '/..')
 
-from Monitor import MonitorThread
-from Controller import ControllerThread
-from closedLoopActuator import closedLoopActuator
+from utils.Monitor import MonitorThread
+from utils.Controller import ControllerThread
+from utils.closedLoopActuator import closedLoopActuator
 
 if __name__ == "__main__":
    

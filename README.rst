@@ -13,17 +13,35 @@ The script takes in input the desired CPU load, the duration of the experiment a
 
 Dependencies
 -------------
-Install matplotlib for real time plot of CPU status: ::
 
-	sudo apt-get install python-matplotlib
+This script uses Python 3.6 and requires the following additional libraries:
 
-Install psutil: ::
+- matplotlib
+- psutil
+- twisted
 
-	sudo apt-get install python-psutil
-	
-Other dependencies: ::
+To get started, first install Virtualenv, then create and activate a Python virtualenv in the project root directory:
 
-        sudo apt-get install python-twisted
+.. code:: bash
+
+    $ cd CPULoadGenerator/
+    $ sudo apt install virtualenv
+    $ virtualenv --python=python3.6 ./venv
+    $ . venv/bin/activate
+    (venv) $
+
+Finally, install the dependencies listed in requirements.txt:
+
+.. code:: bash
+
+    (venv) $ pip install -r requirements.txt
+
+Alternatively, install dependencies system-wide using apt:
+
+.. code:: bash
+
+    $ sudo apt install python3-matplotlib python3-psutil python3-twisted
+
 
 Usage
 -------------
@@ -45,6 +63,6 @@ Dynamics example: 50% load generated on CPU core 0: ::
 	
 	./CPULoadGenerator.py -l 0.5 -d 20 -p 1
 
-.. image:: https://raw.githubusercontent.com/GaetanoCarlucci/CPULoadGenerator/master/50%25-Target-Load.jpg
+.. image:: https://raw.githubusercontent.com/molguin92/CPULoadGenerator/python3_port_stable/50%25-Target-Load.png
     :alt: Example - 50% load on CPU core 0
     :align: center
