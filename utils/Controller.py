@@ -1,16 +1,21 @@
 # Authors: Gaetano Carlucci
 #         Giuseppe Cofano
 
-import threading
+from threading import Thread, RLock
 import time
 
 
-class ControllerThread(threading.Thread):
+class ControllerThread(Thread):
     """
         Controls the CPU status
     """
 
     def __init__(self, interval, ki=None, kp=None):
+        # synchronization
+        self.lock = RLock()
+        self.running = False
+
+
         self.running = 1;  # thread status
         self.sampling_interval = interval
         self.period = 0.1  # actuation period  in seconds
@@ -26,6 +31,10 @@ class ControllerThread(threading.Thread):
         self.int_err = 0;  # integral error
         self.last_ts = time.time();  # last sampled time
         super(ControllerThread, self).__init__()
+
+    def stop(self):
+        with self.lock:
+            self.running = False
 
     def get_sleep_time(self):
         return self.sleepTime
@@ -48,7 +57,14 @@ class ControllerThread(threading.Thread):
         self.CT = CT
 
     def run(self):
-        while self.running:
+        with self.lock:
+            self.running = True
+
+        while True:
+            with self.lock:
+                if not self.running:
+                    break
+
             # ControllerThread has to have the same sampling interval as MonitorThread
             time.sleep(self.sampling_interval)
             self.err = self.CT - self.cpu * 0.01  # computes the proportional error
