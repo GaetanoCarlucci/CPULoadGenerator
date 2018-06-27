@@ -26,7 +26,7 @@ def __sig_handler(*args):
     raise ShutdownException()
 
 
-def load_core(target_load, target_core, duration_seconds=-1, plot=False):
+def load_core(target_core, target_load, duration_seconds=-1, plot=False):
     if duration_seconds >= 0:
         print(f'Loading core {target_core} ({target_load * 100.0}%) for '
               f'{duration_seconds} seconds.')
@@ -63,8 +63,9 @@ def load_core(target_load, target_core, duration_seconds=-1, plot=False):
 
 
 def __validate_cpu_load(ctx, param, value):
-    if not 0. <= value <= 1.:
-        raise click.BadOptionUsage('CPU load out of range [0, 1]')
+    for v in value:
+        if not 0. <= v <= 1.:
+            raise click.BadOptionUsage(f'CPU load {v} out of range [0, 1]')
     return value
 
 
@@ -81,23 +82,37 @@ def __validate_cpu_core(ctx, param, value):
 
 
 @click.command()
-@click.option('--cpu_load', '-l', type=float, help='Target CPU load',
-              default=0.2, show_default=True, callback=__validate_cpu_load)
 @click.option('--core', '-c',
               type=int, callback=__validate_cpu_core,
               required=True, multiple=True,
               help='CPU core to artificially load. '
-                   'Can be specified multiple times to load multiple cores.')
-@click.option('--duration', '-d', type=float, default=-1, show_default=True,
+                   'Can be specified multiple times to load multiple cores, '
+                   'default is all cores.',
+              default=psutil.Process(os.getpid()).cpu_affinity(),
+              show_default=True)
+@click.option('--cpu_load', '-l',
+              type=float, multiple=True,
+              help='Target CPU load. If only one value is provided, '
+                   'it is applied to all affected cores, otherwise specifies '
+                   'load per affected core.',
+              default=0.2, show_default=True, callback=__validate_cpu_load)
+@click.option('--duration', '-d',
+              type=float, default=-1, show_default=True,
               help='Duration in seconds. If omitted or negative, '
                    'program will run until a SIGINT or SIGTERM is received.')
-@click.option('--plot', '-p', is_flag=True, default=False, show_default=True,
+@click.option('--plot', '-p',
+              is_flag=True, default=False, show_default=True,
               help='Plot the resulting CPU load. '
                    'Can only be used with a fixed duration.')
-def __main(cpu_load, core, duration, plot):
+def __main(core, cpu_load, duration, plot):
     if plot and duration < 0:
         raise click.BadOptionUsage(
             'Plot option can only be used with a fixed duration.')
+
+    if len(cpu_load) > 1 and len(cpu_load) != len(core):
+        raise click.BadOptionUsage('Number of cores and loads does not match.')
+    elif len(cpu_load) == 1:
+        cpu_load = itertools.repeat(cpu_load[0], len(core))
 
     # filter out repeated core indexes
     core = list(set(core))
@@ -109,8 +124,8 @@ def __main(cpu_load, core, duration, plot):
     # spawn one process per core
     with multiprocessing.Pool(len(core)) as pool:
         pool.starmap(load_core, zip(
-            itertools.repeat(cpu_load),
             core,
+            cpu_load,
             itertools.repeat(duration),
             itertools.repeat(plot)
         ))
