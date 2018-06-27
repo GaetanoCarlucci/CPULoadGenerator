@@ -5,9 +5,11 @@
 # Python3 port: Manuel Olguín
 import itertools
 import multiprocessing
+import os
 import signal
 
 import click
+import psutil
 
 from utils.ClosedLoopActuator import ClosedLoopActuator
 from utils.Controller import ControllerThread
@@ -22,12 +24,6 @@ class ShutdownException(Exception):
 
 def __sig_handler(*args):
     raise ShutdownException()
-
-
-def __validate_cpu_load(ctx, param, value):
-    if not 0. <= value <= 1.:
-        raise click.BadOptionUsage('CPU load out of range [0, 1]')
-    return value
 
 
 def load_core(target_load, target_core, duration_seconds=-1, plot=False):
@@ -66,11 +62,29 @@ def load_core(target_load, target_core, duration_seconds=-1, plot=False):
         control.join()
 
 
+def __validate_cpu_load(ctx, param, value):
+    if not 0. <= value <= 1.:
+        raise click.BadOptionUsage('CPU load out of range [0, 1]')
+    return value
+
+
+def __validate_cpu_core(ctx, param, value):
+    p = psutil.Process(os.getpid())
+    available_cores = p.cpu_affinity()
+
+    for v in value:
+        if v not in available_cores:
+            raise click.BadOptionUsage(
+                f'Target core ({v}) is not one of the available cores: '
+                f'{available_cores}')
+    return value
+
+
 @click.command()
 @click.option('--cpu_load', '-l', type=float, help='Target CPU load',
               default=0.2, show_default=True, callback=__validate_cpu_load)
 @click.option('--core', '-c',
-              type=click.IntRange(0, multiprocessing.cpu_count() - 1),
+              type=int, callback=__validate_cpu_core,
               required=True, multiple=True,
               help='CPU core to artificially load. '
                    'Can be specified multiple times to load multiple cores.')
