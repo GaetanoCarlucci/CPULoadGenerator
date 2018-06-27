@@ -66,7 +66,10 @@ if __name__ == "__main__":
     actuator.run()
     actuator.close()
 
-    monitor.running = 0
-    control.running = 0;
+    # monitor.running = 0
+    # control.running = 0;
+    monitor.stop()
+    control.stop()
+
     monitor.join()
     control.join()
