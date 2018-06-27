@@ -11,7 +11,10 @@ CPU Load Generator
 .. |made-with-python| image:: https://img.shields.io/badge/Made%20with-Python-1f425f.svg
 .. _made-with-python: https://www.python.org/
 
-`Python3 <https://github.com/GaetanoCarlucci/CPULoadGenerator/tree/Python3/>`_ version.
+Python3 version
+**********************
+This master branch refers to Python2.
+`Python3 <https://github.com/GaetanoCarlucci/CPULoadGenerator/tree/Python3/>`_ version branch.
 
 This script allows to generate a fixed CPU load for a finite time period. To the purpose, a PI controller is employed. 
 The script takes in input the desired CPU load, the duration of the experiment and the CPU core on which the load has to be generated. The controller and the CPU monitor are implemented in two different threads.
