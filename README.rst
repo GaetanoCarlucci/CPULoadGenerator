@@ -18,7 +18,7 @@ This script uses Python 3.6 and requires the following additional libraries:
 
 - matplotlib
 - psutil
-- twisted
+- click
 
 To get started, first install Virtualenv, then create and activate a Python virtualenv in the project root directory:
 
@@ -40,7 +40,7 @@ Alternatively, install dependencies system-wide using apt:
 
 .. code:: bash
 
-    $ sudo apt install python3-matplotlib python3-psutil python3-twisted
+    $ sudo apt install python3-matplotlib python3-psutil python3-click
 
 
 Usage
