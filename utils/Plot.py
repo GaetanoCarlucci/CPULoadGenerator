@@ -23,6 +23,7 @@ class RealTimePlot:
         self.xdata = [0]
         self.line_load, = plt.plot(self.y_load)
         self.line_target, = plt.plot(self.y_target)
+        self.cpu_idx = cpu
         if target != 0:
             plt.legend([self.line_target, self.line_load],
                        ["Target CPU", "CPU [%d] Load" % (cpu)], ncol=2)
@@ -47,7 +48,8 @@ class RealTimePlot:
 
     def close(self):
         if self.cpuT != 0:
-            name = "%d%%-Target-Load" % (self.cpuT * 100) + ".png"
+            name = f'{int(self.cpuT * 100.0):d}%-Target-Load' \
+                   f'-CPU{self.cpu_idx}.png'
             # TODO: add option to change format
             plt.savefig(name, dpi=100)
         plt.close()

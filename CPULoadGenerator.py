@@ -3,31 +3,18 @@
 # Authors: Gaetano Carlucci
 #         Giuseppe Cofano
 # Python3 port: Manuel Olguín
-
+import itertools
 import multiprocessing
-from twisted.python import usage
-
-import sys
-# sys.path.insert(0, 'utils')
-
-from utils.Monitor import MonitorThread
-from utils.Controller import ControllerThread
-from utils.ClosedLoopActuator import ClosedLoopActuator
-
 import signal
 
+import click
 
-class Options(usage.Options):
-    """
-       Defines the default input parameters
-    """
-    optParameters = [
-        ["cpuLoad", "l", 0.2, "Cpu Target Load", float],
-        ["duration", "d", -1, "Duration", int],
-        ["plot", "p", 0, "Enable Plot", int],
-        ["cpu_core", "c", 0, "Select the CPU on which generate the load", int]
-    ]
+from utils.ClosedLoopActuator import ClosedLoopActuator
+from utils.Controller import ControllerThread
+from utils.Monitor import MonitorThread
 
+
+# sys.path.insert(0, 'utils')
 
 class ShutdownException(Exception):
     pass
@@ -37,36 +24,25 @@ def __sig_handler(*args):
     raise ShutdownException()
 
 
-if __name__ == "__main__":
+def __validate_cpu_load(ctx, param, value):
+    if not 0. <= value <= 1.:
+        raise click.BadOptionUsage('CPU load out of range [0, 1]')
+    return value
 
-    options = Options()
-    try:
-        options.parseOptions()
-    except Exception as e:
-        print(f'{sys.argv[0]}: {e}')
-        print(f'{sys.argv[0]}: Try --help for usage details.')
-        sys.exit(1)
+
+def load_core(target_load, target_core, duration_seconds=-1, plot=False):
+    if duration_seconds >= 0:
+        print(f'Loading core {target_core} ({target_load * 100.0}%) for '
+              f'{duration_seconds} seconds.')
     else:
-        if options['cpuLoad'] < 0 or options['cpuLoad'] > 1:
-            print("CPU target load out of the range [0,1]")
-            sys.exit(1)
-        # if options['duration'] < 0:
-        #     print("Invalid duration")
-        #     sys.exit(1)
-        if options['plot'] != 0 and options['plot'] != 1:
-            print("plot can be enabled 1 or disabled 0")
-            sys.exit(1)
-        if options['cpu_core'] >= multiprocessing.cpu_count():
-            print(f'You have only {multiprocessing.cpu_count()} '
-                  f'cores on your machine')
-            sys.exit(1)
+        print(f'Loading core {target_core} ({target_load * 100.0}%) until '
+              f'interrupted.')
 
-    monitor = MonitorThread(options['cpu_core'], 0.1)
+    monitor = MonitorThread(target_core, 0.1)
     control = ControllerThread(0.1)
-    control.set_cpu_target(options['cpuLoad'])
-    actuator = ClosedLoopActuator(control, monitor, options['duration'],
-                                  options['cpu_core'], options['cpuLoad'],
-                                  options['plot'])
+    control.set_cpu_target(target_load)
+    actuator = ClosedLoopActuator(control, monitor, duration_seconds,
+                                  target_core, target_load, plot)
 
     signal.signal(signal.SIGINT, __sig_handler)
     signal.signal(signal.SIGTERM, __sig_handler)
@@ -88,3 +64,43 @@ if __name__ == "__main__":
 
         monitor.join()
         control.join()
+
+
+@click.command()
+@click.option('--cpu_load', '-l', type=float, help='Target CPU load',
+              default=0.2, show_default=True, callback=__validate_cpu_load)
+@click.option('--core', '-c',
+              type=click.IntRange(0, multiprocessing.cpu_count() - 1),
+              required=True, multiple=True,
+              help='CPU core to artificially load. '
+                   'Can be specified multiple times to load multiple cores.')
+@click.option('--duration', '-d', type=float, default=-1, show_default=True,
+              help='Duration in seconds. If omitted or negative, '
+                   'program will run until a SIGINT or SIGTERM is received.')
+@click.option('--plot', '-p', is_flag=True, default=False, show_default=True,
+              help='Plot the resulting CPU load. '
+                   'Can only be used with a fixed duration.')
+def __main(cpu_load, core, duration, plot):
+    if plot and duration < 0:
+        raise click.BadOptionUsage(
+            'Plot option can only be used with a fixed duration.')
+
+    # filter out repeated core indexes
+    core = list(set(core))
+
+    # disable signal handlers before spawning processes
+    signal.signal(signal.SIGINT, signal.SIG_IGN)
+    signal.signal(signal.SIGTERM, signal.SIG_IGN)
+
+    # spawn one process per core
+    with multiprocessing.Pool(len(core)) as pool:
+        pool.starmap(load_core, zip(
+            itertools.repeat(cpu_load),
+            core,
+            itertools.repeat(duration),
+            itertools.repeat(plot)
+        ))
+
+
+if __name__ == '__main__':
+    __main()
