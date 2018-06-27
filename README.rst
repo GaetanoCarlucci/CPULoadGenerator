@@ -8,8 +8,10 @@ CPU Load Generator
 .. |mit-badge| image:: https://img.shields.io/:license-mit-green.svg?style=flat
 .. _mit-badge: http://opensource.org/licenses/MIT
 
-This script allows to generate a fixed CPU load for a finite time period. To the purpose, a PI controller is employed. 
-The script takes in input the desired CPU load, the duration of the experiment and the CPU core on which the load has to be generated. The controller and the CPU monitor are implemented in two different threads.
+This script allows to generate a fixed CPU load for a finite or indefinite time period, for one or more CPU cores.
+A PI controller is employed for this purpose.
+The script takes in input the desired CPU load and the CPU core on which the load has to be generated.
+The controller and the CPU monitor are implemented in two different threads.
 
 Dependencies
 -------------
@@ -43,25 +45,22 @@ Alternatively, install dependencies system-wide using apt:
     $ sudo apt install python3-matplotlib python3-psutil python3-click
 
 
-Usage
+Examples
 -------------
-To generate 20% of load on core 0 for 20 seconds run: :: 
-	
-	./CPULoadGenerator.py -l 0.2 -d 20 -c 0
+1. Generate 20% of load on core 0 for 20 seconds: ::
 
-To enable real time plot run: :: 
-	
-	./CPULoadGenerator.py -p 1
-	
-To generate 20% of CPU load on core 0 and on core 1 run: :: 
-	
-	./CPULoadGenerator.py -c 1 -l 0.2 | ./CPULoadGenerator.py -c 0 -l 0.2
+    ./CPULoadGenerator.py -l 0.2 -d 20 -c 0
 
-Example
--------------
-Dynamics example: 50% load generated on CPU core 0: ::
-	
-	./CPULoadGenerator.py -l 0.5 -d 20 -p 1
+2. Generate 65% load on cores 0, 1 and 5, until the program is interrupted through Ctrl-C: ::
+
+    ./CPULoadGenerator.py -l 0.65 -c 0 -c 1 -c 5
+
+3. Generate 12% load on cores 0 and 1, for 20.5 seconds, and then plot the load for each of the cores: ::
+
+    ./CPULoadGenerator.py -l 0.12 -c 0 -c 1 -d 20.5 --plot
+
+
+4. Example graph of CPU load:
 
 .. image:: https://raw.githubusercontent.com/molguin92/CPULoadGenerator/python3_port_stable/50%25-Target-Load.png
     :alt: Example - 50% load on CPU core 0
