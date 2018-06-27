@@ -95,7 +95,7 @@ def __validate_cpu_core(ctx, param, value):
               help='Target CPU load. If only one value is provided, '
                    'it is applied to all affected cores, otherwise specifies '
                    'load per affected core.',
-              default=0.2, show_default=True, callback=__validate_cpu_load)
+              default=[0.2], show_default=True, callback=__validate_cpu_load)
 @click.option('--duration', '-d',
               type=float, default=-1, show_default=True,
               help='Duration in seconds. If omitted or negative, '
