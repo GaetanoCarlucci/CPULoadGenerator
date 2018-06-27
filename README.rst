@@ -9,7 +9,7 @@ CPU Load Generator
 .. _mit-badge: http://opensource.org/licenses/MIT
 
 .. |made-with-python| image:: https://img.shields.io/badge/Made%20with-Python-1f425f.svg
-   :target: https://www.python.org/
+.. _made-with-python: https://www.python.org/
 
 ` **Python3** <https://github.com/GaetanoCarlucci/CPULoadGenerator/tree/Python3/>`_ version.
 
