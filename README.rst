@@ -19,7 +19,7 @@ Python3 version
 -------------
 This master branch refers to Python2. 
 
-`Python3 <https://github.com/GaetanoCarlucci/CPULoadGenerator/tree/Python3/>`_ version branch.
+Here it is the `Python3 <https://github.com/GaetanoCarlucci/CPULoadGenerator/tree/Python3/>`_ version branch.
 
 
 
