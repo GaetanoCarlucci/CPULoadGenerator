@@ -1,21 +1,26 @@
 # Authors: Gaetano Carlucci
 #         Giuseppe Cofano
 
-import os, psutil
-import threading
+import os
+import psutil
+from threading import Thread, RLock
 import time
 
 
-class MonitorThread(threading.Thread):
+class MonitorThread(Thread):
     """
        Monitors the CPU status
     """
 
     def __init__(self, cpu_core, interval):
+        # synchronization
+        self.lock = RLock()
+        self.running = False
+
         self.sampling_interval = interval;  # sample time interval
         self.sample = 0.5;  # cpu load measurement sample
         self.cpu = 0.5;  # cpu load filtered
-        self.running = 1;  # thread status
+
         self.alpha = 1;  # filter coefficient
         self.sleepTimeTarget = 0.03
         self.sleepTime = 0.03
@@ -24,6 +29,10 @@ class MonitorThread(threading.Thread):
         self.dynamics = {"time"     : [], "cpu": [], "sleepTimeTarget": [],
                          "cpuTarget": [], "sleepTime": [], }
         super(MonitorThread, self).__init__()
+
+    def stop(self):
+        with self.lock:
+            self.running = False
 
     def get_cpu_load(self):
         return self.cpu
@@ -50,7 +59,14 @@ class MonitorThread(threading.Thread):
         except AttributeError:
             p.cpu_affinity([self.cpu_core])
 
-        while self.running:
+        with self.lock:
+            self.running = True
+
+        while True:
+            with self.lock:
+                if not self.running:
+                    break
+
             try:
                 self.sample = p.get_cpu_percent(self.sampling_interval)
             except AttributeError:
