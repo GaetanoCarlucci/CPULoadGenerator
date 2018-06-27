@@ -14,6 +14,8 @@ from utils.Monitor import MonitorThread
 from utils.Controller import ControllerThread
 from utils.ClosedLoopActuator import ClosedLoopActuator
 
+import signal
+
 
 class Options(usage.Options):
     """
@@ -27,9 +29,15 @@ class Options(usage.Options):
     ]
 
 
-if __name__ == "__main__":
+class ShutdownException(Exception):
+    pass
 
-    import sys
+
+def __sig_handler(*args):
+    raise ShutdownException()
+
+
+if __name__ == "__main__":
 
     options = Options()
     try:
@@ -54,22 +62,29 @@ if __name__ == "__main__":
             sys.exit(1)
 
     monitor = MonitorThread(options['cpu_core'], 0.1)
-    monitor.start()
-
     control = ControllerThread(0.1)
-    control.start()
     control.set_cpu_target(options['cpuLoad'])
-
     actuator = ClosedLoopActuator(control, monitor, options['duration'],
                                   options['cpu_core'], options['cpuLoad'],
                                   options['plot'])
-    actuator.run()
-    actuator.close()
 
-    # monitor.running = 0
-    # control.running = 0;
-    monitor.stop()
-    control.stop()
+    signal.signal(signal.SIGINT, __sig_handler)
+    signal.signal(signal.SIGTERM, __sig_handler)
 
-    monitor.join()
-    control.join()
+    try:
+        monitor.start()
+        control.start()
+
+        actuator.run()
+
+    except ShutdownException:
+        pass
+
+    finally:
+        actuator.close()
+
+        monitor.stop()
+        control.stop()
+
+        monitor.join()
+        control.join()
