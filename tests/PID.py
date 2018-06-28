@@ -39,7 +39,7 @@ if __name__ == "__main__":
         control = ControllerThread(0.1)
         monitor = MonitorThread(core, 0.1)
         actuator = ClosedLoopActuator(control, monitor, len(cpuSequence) *
-                                      stepPeriod, core, 1, dynamics_plot_online)
+                                      stepPeriod, 1)
 
         monitor.start()
         control.start()
