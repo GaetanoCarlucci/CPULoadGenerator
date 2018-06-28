@@ -12,7 +12,7 @@ import os
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)) + '/..')
 
 from utils.Monitor import MonitorThread
-from utils.openLoopActuator import openLoopActuator
+from utils.OpenLoopActuator import OpenLoopActuator
 
 period = 0.05 
 
@@ -37,15 +37,15 @@ if __name__ == "__main__":
         data = {"x":[], "y":[]}
         for sleepTime in sleepTimeTest:
             monitor = MonitorThread(0, 0.1)
-            monitor.setSleepTimeTarget(sleepTime)
+            monitor.set_sleep_time_target(sleepTime)
             monitor.start()
 
-            actuator = openLoopActuator(monitor, 10, 0, dynamics_plot_online)
-            actuator.setSleepTime(sleepTime)
+            actuator = OpenLoopActuator(monitor, 10, 0, dynamics_plot_online)
+            actuator.set_sleep_time(sleepTime)
             actuator.run()
             
             monitor.running = 0
-            dynamics =  monitor.getDynamics()
+            dynamics =  monitor.get_dynamics()
             actuator.close()
             monitor.join()
 

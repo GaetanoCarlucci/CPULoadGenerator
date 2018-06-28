@@ -9,10 +9,13 @@ import matplotlib.pyplot as plt
 
 import sys
 import os
+
+import psutil
+
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)) + '/..')
 
 from utils.Monitor import MonitorThread
-from utils.openLoopActuator import openLoopActuator
+from utils.OpenLoopActuator import OpenLoopActuator
 
 period = 0.05 # actuation period  in seconds
 
@@ -27,7 +30,7 @@ def inverse_cpu_model(sleepTime):
     return cpu_load
 
 if __name__ == "__main__":
-   
+
     ######################################################
     #             FEEDFORWARD TEST                    #
     ######################################################
@@ -35,6 +38,10 @@ if __name__ == "__main__":
     # this test aims at characterizing the CPU
     testing = 1
     dynamics_plot_online = 0
+    p = psutil.Process(os.getpid())
+    available_cores = p.cpu_affinity()
+    core = available_cores[0]
+
     if testing == 1:
         sleepTimeSequence = [0.001, 0.005, 0.01, 0.02, 0.03, 0.08, 0.1, 0.15, 0.2, 0.3, 0.4, 0.5]
         cpuSequence = [0.1, 0.8, 0.30, 0.70, 0.40, 0.10, 0.20, 0.60, 0.20, 0.70]
@@ -42,16 +49,17 @@ if __name__ == "__main__":
         #sleepTimeSequence = [0.001,  0.02]
         sleepTimeSequence = [ cpu_model(x) for x in cpuSequence]
         stepPeriod = 4
-        monitor = MonitorThread(0, 0.1)
-        actuator = openLoopActuator(monitor, len(sleepTimeSequence) * stepPeriod, 0, dynamics_plot_online)
+        monitor = MonitorThread(core, 0.1)
+        actuator = OpenLoopActuator(monitor, len(sleepTimeSequence) *
+                                    stepPeriod, core, dynamics_plot_online)
         monitor.start()
         actuator.run_sequence(sleepTimeSequence)
-        
-        monitor.running = 0
-        dynamics =  monitor.getDynamics()
+
+        monitor.stop()
+        dynamics =  monitor.get_dynamics()
         actuator.close()
         monitor.join()
-        
+
         with open('feed_forward_data', 'w') as outfile:
             json.dump(dynamics, outfile)
     else:
@@ -67,7 +75,7 @@ if __name__ == "__main__":
     ax1.set_ylim([0, 100])
     for tl in ax1.get_yticklabels():
         tl.set_color('b')
-    
+
     ax2 = plt.twinx()
     ax2.set_ylabel('Input Load', color='r')
     cpuInput = [ 100*inverse_cpu_model(x) for x in dynamics['sleepTimeTarget']]
