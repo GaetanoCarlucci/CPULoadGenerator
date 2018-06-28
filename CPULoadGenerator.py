@@ -11,7 +11,8 @@ import signal
 import click
 import psutil
 
-from utils.ClosedLoopActuator import ClosedLoopActuator
+from utils.ClosedLoopActuator import ClosedLoopActuator, \
+    PlottingClosedLoopActuator
 from utils.Controller import ControllerThread
 from utils.Monitor import MonitorThread
 
@@ -26,7 +27,9 @@ def __sig_handler(*args):
     raise ShutdownException()
 
 
-def load_core(target_core, target_load, duration_seconds=-1, plot=False):
+def load_core(target_core, target_load,
+              duration_seconds=-1, plot=False,
+              sampling_interval=0.1):
     if duration_seconds >= 0:
         print(f'Loading core {target_core} ({target_load * 100.0}%) for '
               f'{duration_seconds} seconds.')
@@ -34,11 +37,24 @@ def load_core(target_core, target_load, duration_seconds=-1, plot=False):
         print(f'Loading core {target_core} ({target_load * 100.0}%) until '
               f'interrupted.')
 
-    monitor = MonitorThread(target_core, 0.1)
-    control = ControllerThread(0.1)
+    if sampling_interval <= 0:
+        raise Exception('Negative sampling interval!')
+
+    # lock this process to the target core
+    process = psutil.Process(os.getpid())
+    process.cpu_affinity([target_core])
+
+    monitor = MonitorThread(target_core, sampling_interval)
+    control = ControllerThread(sampling_interval)
     control.set_cpu_target(target_load)
-    actuator = ClosedLoopActuator(control, monitor, duration_seconds,
-                                  target_core, target_load, plot)
+
+    # polymorphism for plotting
+    if plot:
+        actuator = PlottingClosedLoopActuator(control, monitor,
+                                              duration_seconds, target_core)
+    else:
+        actuator = ClosedLoopActuator(control, monitor,
+                                      duration_seconds, target_core)
 
     signal.signal(signal.SIGINT, __sig_handler)
     signal.signal(signal.SIGTERM, __sig_handler)
@@ -85,6 +101,13 @@ def __validate_cpu_core(ctx, param, value):
     return value
 
 
+def __validate_sampling_interval(ctx, param, value):
+    if value < 0:
+        raise click.BadOptionUsage(
+            f'Sampling interval cannot be negative ({value}).')
+    return value
+
+
 @click.command()
 @click.option('--core', '-c',
               type=int, callback=__validate_cpu_core,
@@ -108,7 +131,13 @@ def __validate_cpu_core(ctx, param, value):
               is_flag=True, default=False, show_default=True,
               help='Plot the resulting CPU load. '
                    'Can only be used with a fixed duration.')
-def __main(core, cpu_load, duration, plot):
+@click.option('--sampling_interval', '-s',
+              type=float, default=0.1, show_default=True,
+              help='Sampling interval, in seconds, '
+                   'for the internal PI controller. '
+                   'Changing this value is strongly discouraged!',
+              callback=__validate_sampling_interval)
+def __main(core, cpu_load, duration, plot, sampling_interval):
     if plot and duration < 0:
         raise click.BadOptionUsage(
             'Plot option can only be used with a fixed duration.')
@@ -131,7 +160,8 @@ def __main(core, cpu_load, duration, plot):
             core,
             cpu_load,
             itertools.repeat(duration),
-            itertools.repeat(plot)
+            itertools.repeat(plot),
+            itertools.repeat(sampling_interval)
         ))
 
 
