@@ -31,11 +31,11 @@ def load_core(target_core, target_load,
               duration_seconds=-1, plot=False,
               sampling_interval=0.1):
     if duration_seconds >= 0:
-        print(f'Loading core {target_core} ({target_load * 100.0}%) for '
+        print(f'Loading core {target_core} ({target_load * 100.0:0>5.2f}%) for '
               f'{duration_seconds} seconds.')
     else:
-        print(f'Loading core {target_core} ({target_load * 100.0}%) until '
-              f'interrupted.')
+        print(f'Loading core {target_core} ({target_load * 100.0:0>5.2f}%) '
+              f'until interrupted.')
 
     if sampling_interval <= 0:
         raise Exception('Negative sampling interval!')
