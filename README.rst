@@ -19,9 +19,7 @@ Python versions
 **********************
 This master branch refers to Python versions **2.7, 3.2, 3.3, 3.4**.
 
-`Here <https://github.com/GaetanoCarlucci/CPULoadGenerator/tree/Python3/>`_ it is the **3.6** version branch.
-
-
+`Here <https://github.com/GaetanoCarlucci/CPULoadGenerator/tree/Python3/>`_ it is the **3.6** version branch which contains some extended features.
 
 Dependencies
 **********************
