@@ -53,6 +53,10 @@ def load_core(target_core, target_load, duration_seconds=-1, plot=False):
         pass
 
     finally:
+        # shutting down, so ignore any signals
+        signal.signal(signal.SIGINT, signal.SIG_IGN)
+        signal.signal(signal.SIGTERM, signal.SIG_IGN)
+
         actuator.close()
 
         monitor.stop()
