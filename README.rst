@@ -1,12 +1,15 @@
 CPU Load Generator
 ================
-|travis-badge|_ |mit-badge|_
+|travis-badge|_ |mit-badge|_ |made-with-python|_
 
-.. |travis-badge| image:: https://travis-ci.org/molguin92/CPULoadGenerator.svg?branch=master
-.. _travis-badge: https://travis-ci.org/molguin92/CPULoadGenerator
+.. |travis-badge| image:: https://travis-ci.org/GaetanoCarlucci/CPULoadGenerator.svg?branch=master
+.. _travis-badge: https://travis-ci.org/GaetanoCarlucci/CPULoadGenerator
 
 .. |mit-badge| image:: https://img.shields.io/:license-mit-green.svg?style=flat
 .. _mit-badge: http://opensource.org/licenses/MIT
+
+.. |made-with-python| image:: https://img.shields.io/badge/Made%20with-Python-1f425f.svg
+.. _made-with-python: https://www.python.org/
 
 This script allows to generate a fixed CPU load for a finite or indefinite time period, for one or more CPU cores.
 A PI controller is employed for this purpose.
