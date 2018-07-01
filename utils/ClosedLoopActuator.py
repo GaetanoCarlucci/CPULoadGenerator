@@ -66,7 +66,6 @@ class ClosedLoopActuator:
 class PlottingClosedLoopActuator(ClosedLoopActuator):
     """
         Generates CPU load by tuning the sleep time and plots results after run.
-
         This is implemented through polymorphism to avoid internal
         if-branches which generate additional, non-controlled load.
     """

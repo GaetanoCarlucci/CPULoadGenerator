@@ -17,8 +17,6 @@ from utils.Controller import ControllerThread
 from utils.Monitor import MonitorThread
 
 
-# sys.path.insert(0, 'utils')
-
 class ShutdownException(Exception):
     pass
 

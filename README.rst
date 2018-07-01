@@ -1,5 +1,5 @@
 CPU Load Generator (Python 3)
-================
+==============
 |travis-badge|_ |mit-badge|_ |made-with-python|_
 
 .. |travis-badge| image:: https://travis-ci.org/GaetanoCarlucci/CPULoadGenerator.svg?branch=master
