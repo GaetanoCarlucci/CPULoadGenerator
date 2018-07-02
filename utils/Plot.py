@@ -44,6 +44,6 @@ class realTimePlot():
 
     def close(self):
         if self.cpuT != 0:
-            name = "%d%%-Target-Load" % (self.cpuT*100)+ ".jpg"
+            name = "%d%%-Target-Load" % (self.cpuT*100)+ ".png"
             plt.savefig(name, dpi=100)
         plt.close();

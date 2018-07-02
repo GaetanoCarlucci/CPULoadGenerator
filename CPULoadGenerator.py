@@ -18,8 +18,8 @@ class Options(usage.Options):
        Defines the default input parameters
     """
     optParameters = [
-            ["cpuLoad", "l", 0.2, "Cpu Target Load", float],
-            ["duration", "d", 10, "Duration", int],
+            ["cpuLoad", "l", 0.4, "Cpu Target Load", float],
+            ["duration", "d", 20, "Duration", int],
             ["plot", "p" , 0, "Enable Plot", int],
             ["cpu_core", "c" , 0, "Select the CPU on which generate the load", int]
         ]
