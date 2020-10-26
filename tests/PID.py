@@ -7,13 +7,10 @@
 import json
 import matplotlib.pyplot as plt
 
-import sys
-import os
-sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)) + '/../utils')
 
-from Monitor import MonitorThread
-from Controller import ControllerThread
-from closedLoopActuator import closedLoopActuator
+from cpu_load_generator.utils.Monitor import MonitorThread
+from cpu_load_generator.utils.Controller import ControllerThread
+from cpu_load_generator.utils.closedLoopActuator import closedLoopActuator
 
 if __name__ == "__main__":
    

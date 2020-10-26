@@ -7,12 +7,8 @@
 import json
 import matplotlib.pyplot as plt
 
-import sys
-import os
-sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)) + '/../utils')
-
-from Monitor import MonitorThread
-from openLoopActuator import openLoopActuator
+from cpu_load_generator.utils.Monitor import MonitorThread
+from cpu_load_generator.utils.openLoopActuator import openLoopActuator
 
 period = 0.05 
 
