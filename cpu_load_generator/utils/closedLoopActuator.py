@@ -3,7 +3,7 @@
 
 import time
 
-from Plot import realTimePlot
+from cpu_load_generator.utils.Plot import realTimePlot
 
 
 class closedLoopActuator():
