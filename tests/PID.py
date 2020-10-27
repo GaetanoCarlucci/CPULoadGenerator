@@ -8,9 +8,9 @@ import json
 import matplotlib.pyplot as plt
 
 
-from cpu_load_generator.utils.Monitor import MonitorThread
-from cpu_load_generator.utils.Controller import ControllerThread
-from cpu_load_generator.utils.closedLoopActuator import closedLoopActuator
+from cpu_load_generator.utils._monitor import MonitorThread
+from cpu_load_generator.utils._controller import ControllerThread
+from cpu_load_generator.utils.closed_loop_actuator import ClosedLoopActuator
 
 if __name__ == "__main__":
    
@@ -20,7 +20,7 @@ if __name__ == "__main__":
     # testing activities
     # this test aims at characterizing the CPU
     testing = 1
-    dynamics_plot_online = 0
+    dynamics_plot_online = 1
     if testing == 1:
         cpuSequence = [0.8, 0.1, 0.30, 0.70, 0.40, 0.10, 0.20, 0.60, 0.20, 0.70]
         #cpuSequence = [0.8, 0.1]
@@ -28,16 +28,16 @@ if __name__ == "__main__":
 
         control = ControllerThread(0.1)
         monitor = MonitorThread(0, 0.1)
-        actuator = closedLoopActuator(control, monitor, len(cpuSequence) * stepPeriod, 0, 1, dynamics_plot_online)
+        actuator = ClosedLoopActuator(control, monitor, len(cpuSequence) * stepPeriod, 0, 1, dynamics_plot_online)
 
         monitor.start()
         control.start()
         actuator.run_sequence(cpuSequence)
         
-        actuator.close()
+        actuator.close_plot()
         monitor.running = 0
         control.running = 0
-        dynamics =  monitor.getDynamics()
+        dynamics = monitor.dynamics
        
         monitor.join()
         control.join()

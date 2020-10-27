@@ -7,8 +7,8 @@
 import json
 import matplotlib.pyplot as plt
 
-from cpu_load_generator.utils.Monitor import MonitorThread
-from cpu_load_generator.utils.openLoopActuator import openLoopActuator
+from cpu_load_generator.utils._monitor import MonitorThread
+from cpu_load_generator.utils.open_loop_actuator import OpenLoopActuator
 
 period = 0.05 
 
@@ -33,15 +33,15 @@ if __name__ == "__main__":
         data = {"x":[], "y":[]}
         for sleepTime in sleepTimeTest:
             monitor = MonitorThread(0, 0.1)
-            monitor.setSleepTimeTarget(sleepTime)
+            monitor.sleep_time_target = sleepTime
             monitor.start()
 
-            actuator = openLoopActuator(monitor, 10, 0, dynamics_plot_online)
-            actuator.setSleepTime(sleepTime)
+            actuator = OpenLoopActuator(monitor, 10, 0, dynamics_plot_online)
+            actuator.sleep_time = sleepTime
             actuator.run()
             
             monitor.running = 0
-            dynamics =  monitor.getDynamics()
+            dynamics =  monitor.dynamics
             actuator.close()
             monitor.join()
 

@@ -5,13 +5,13 @@
 
 import argparse
 
-from cpu_load_generator.utils.Monitor import MonitorThread
-from cpu_load_generator.utils.Controller import ControllerThread
-from cpu_load_generator.utils.closedLoopActuator import closedLoopActuator
+from cpu_load_generator.utils._monitor import MonitorThread
+from cpu_load_generator.utils._controller import ControllerThread
+from cpu_load_generator.utils.closed_loop_actuator import ClosedLoopActuator
 
 
 def parse_args(parser):
-    parser.add_argument('-l', '--cpuLoad', type=float, help='Cpu Target Load')
+    parser.add_argument('-l', '--cpu_load', type=float, help='Cpu Target Load')
     parser.add_argument('-d', '--duration', type=int, help='Duration')
     parser.add_argument('-p', '--plot', type=bool, default=False, help='Enable Plot')
     parser.add_argument('-c', '--cpu_core', type=int, help='Select the CPU on which generate the load')
@@ -29,11 +29,11 @@ def main():
 
     control = ControllerThread(0.1)
     control.start()
-    control.setCpuTarget(args.cpuLoad)
+    control.target_cpu_load = args.cpu_load
 
-    actuator = closedLoopActuator(control, monitor, args.duration, args.cpu_core, args.cpuLoad, args.plot)
+    actuator = ClosedLoopActuator(control, monitor, args.duration, args.cpu_core, args.cpu_load, args.plot)
     actuator.run()
-    actuator.close()
+    actuator.close_plot()
 
     monitor.running = 0
     control.running = 0

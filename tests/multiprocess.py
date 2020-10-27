@@ -2,9 +2,9 @@ import multiprocessing as mp
 
 import psutil
 
-from cpu_load_generator.utils.Monitor import MonitorThread
-from cpu_load_generator.utils.Controller import ControllerThread
-from cpu_load_generator.utils.closedLoopActuator import closedLoopActuator
+from cpu_load_generator.utils._monitor import MonitorThread
+from cpu_load_generator.utils._controller import ControllerThread
+from cpu_load_generator.utils.closed_loop_actuator import ClosedLoopActuator
 
 
 def burn_cpu(cpu_num, load_level, duration):
@@ -15,11 +15,11 @@ def burn_cpu(cpu_num, load_level, duration):
 
     control = ControllerThread(0.1)
     control.start()
-    control.setCpuTarget(load_level)
+    control.target_cpu_load = load_level
 
-    actuator = closedLoopActuator(control, monitor, duration, cpu_num, load_level, False)
+    actuator = ClosedLoopActuator(control, monitor, duration, cpu_num, load_level, False)
     actuator.run()
-    actuator.close()
+    actuator.close_plot()
 
     monitor.running = 0
     control.running = 0

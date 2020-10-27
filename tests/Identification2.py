@@ -8,8 +8,8 @@ import time
 import json
 import matplotlib.pyplot as plt
 
-from cpu_load_generator.utils.Monitor import MonitorThread
-from cpu_load_generator.utils.openLoopActuator import openLoopActuator
+from cpu_load_generator.utils._monitor import MonitorThread
+from cpu_load_generator.utils.open_loop_actuator import OpenLoopActuator
  
 if __name__ == "__main__":
    
@@ -28,11 +28,11 @@ if __name__ == "__main__":
         stepPeriod = 4
         monitor = MonitorThread(0, 0.1)
         monitor.start()
-        actuator = openLoopActuator(monitor, len(sleepTimeSequence) * stepPeriod, 0, dynamics_plot_online)
+        actuator = OpenLoopActuator(monitor, len(sleepTimeSequence) * stepPeriod, 0, dynamics_plot_online)
         actuator.run_sequence(sleepTimeSequence)
         
         monitor.running = 0
-        dynamics =  monitor.getDynamics()
+        dynamics = monitor.dynamics
         actuator.close()
         monitor.join()
         

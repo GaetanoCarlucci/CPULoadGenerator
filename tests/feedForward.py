@@ -7,8 +7,8 @@
 import json
 import matplotlib.pyplot as plt
 
-from cpu_load_generator.utils.Monitor import MonitorThread
-from cpu_load_generator.utils.openLoopActuator import openLoopActuator
+from cpu_load_generator.utils._monitor import MonitorThread
+from cpu_load_generator.utils.open_loop_actuator import OpenLoopActuator
 
 period = 0.05 # actuation period  in seconds
 
@@ -39,12 +39,12 @@ if __name__ == "__main__":
         sleepTimeSequence = [ cpu_model(x) for x in cpuSequence]
         stepPeriod = 4
         monitor = MonitorThread(0, 0.1)
-        actuator = openLoopActuator(monitor, len(sleepTimeSequence) * stepPeriod, 0, dynamics_plot_online)
+        actuator = OpenLoopActuator(monitor, len(sleepTimeSequence) * stepPeriod, 0, dynamics_plot_online)
         monitor.start()
         actuator.run_sequence(sleepTimeSequence)
         
         monitor.running = 0
-        dynamics =  monitor.getDynamics()
+        dynamics =  monitor.dynamics
         actuator.close()
         monitor.join()
         
