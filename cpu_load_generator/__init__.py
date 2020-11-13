@@ -1,0 +1,1 @@
+from cpu_load_generator.gen_load import load_single_core, load_all_cores
