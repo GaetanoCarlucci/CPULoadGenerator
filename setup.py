@@ -13,5 +13,5 @@ setup(name='cpu_load_generator',
       license='MIT',
       packages=find_packages(),
       zip_safe=False,
-      install_requires=['psutil', 'matplotlib']
+      install_requires=['psutil']
       )
