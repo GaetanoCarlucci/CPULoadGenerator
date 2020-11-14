@@ -3,9 +3,10 @@ import os
 
 import psutil
 
-from cpu_load_generator.common._monitor import MonitorThread  # pylint: disable=protected-access
-from cpu_load_generator.common._controller import ControllerThread  # pylint: disable=protected-access
-from cpu_load_generator.common._closed_loop_actuator import ClosedLoopActuator  # pylint: disable=protected-access
+from cpu_load_generator.common._monitor import MonitorThread
+from cpu_load_generator.common._controller import ControllerThread
+from cpu_load_generator.common._closed_loop_actuator \
+    import ClosedLoopActuator
 
 
 def load_single_core(core_num, duration_s, target_load):

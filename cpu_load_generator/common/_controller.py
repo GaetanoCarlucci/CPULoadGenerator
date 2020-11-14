@@ -59,7 +59,8 @@ class ControllerThread(Thread):
 
             self._integral_error = self._integral_error + err * sample_interval_s
             last_time_stamp = current_time_stamp
-            self._cpu_period_s = self._prop_const_pi_reg * err + self._integral_const_pi_regulator * self._integral_error
+            self._cpu_period_s = self._prop_const_pi_reg * err + \
+                self._integral_const_pi_regulator * self._integral_error
 
             # anti wind up control
             if self._cpu_period_s < 0:
@@ -70,4 +71,3 @@ class ControllerThread(Thread):
                 self._integral_error = self._integral_error - err * sample_interval_s
 
             self.sleep_time_s = self._actuation_period - self._cpu_period_s
-
