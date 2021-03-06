@@ -5,37 +5,32 @@ This package allows to generate a fixed CPU load for a finite time period.
 The script takes in input the desired CPU load, the duration of the experiment and
 the CPU core or all cores on which the load has to be generated.
 
-Python versions
-***************
+**Python versions**
 This master branch refers to Python versions 3.x
 
-Dependencies
-************
+**Dependencies**
 Installment of psutil is required (it is already set as dependency in the setup.py)
 
-Install psutil:
-
-*pip install psutil*
+    Install psutil: *pip install psutil*
 	
-Other dependencies for unit tests and linters:
+**Other dependencies for unit tests and linters**:
     
-*pip install mock pytest flake8*
+    pip install mock pytest flake8 tox
 
-Usage
-******
+*Usage*
 To generate 20% of load on core 0 for 20 seconds run:
 
-*python -m cpu_load_generator -l 0.2 -d 20 -c 0*
+    *python -m cpu_load_generator -l 0.2 -d 20 -c 0*
 
 To generate 50% of load on all logical cores for 20 seconds run:
 
-*python -m cpu_load_generator -l 0.5 -d 20 -c -1*
+    *python -m cpu_load_generator -l 0.5 -d 20 -c -1*
 
 To use the package features from python code:
 
 Install the package from PyPi by issuing the following command:
 
-*python -m pip instal cpu-load-generator*
+    *python -m pip instal cpu-load-generator*
 
 To use its features from your code:
 
