@@ -20,17 +20,17 @@ Installment of psutil is required (it is already set as dependency in the setup.
 *Usage*
 To generate 20% of load on core 0 for 20 seconds run:
 
-    *python -m cpu_load_generator -l 0.2 -d 20 -c 0*
+    python -m cpu_load_generator -l 0.2 -d 20 -c 0
 
 To generate 50% of load on all logical cores for 20 seconds run:
 
-    *python -m cpu_load_generator -l 0.5 -d 20 -c -1*
+    python -m cpu_load_generator -l 0.5 -d 20 -c -1
 
 To use the package features from python code:
 
 Install the package from PyPi by issuing the following command:
 
-    *python -m pip instal cpu-load-generator*
+    python -m pip instal cpu-load-generator
 
 To use its features from your code:
 
