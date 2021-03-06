@@ -11,7 +11,9 @@ This master branch refers to Python versions 3.x
 **Dependencies**
 Installment of psutil is required (it is already set as dependency in the setup.py)
 
-    Install psutil: *pip install psutil*
+Install psutil: 
+    
+    pip install psutil
 	
 **Other dependencies for unit tests and linters**:
     
