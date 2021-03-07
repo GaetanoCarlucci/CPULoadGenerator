@@ -1,7 +1,10 @@
 from mock import patch, Mock
 from pytest import raises
+from collections import namedtuple
 
-from cpu_load_generator.__main__ import input_error_handler
+from cpu_load_generator.common._monitor import psutil
+from cpu_load_generator.__main__ import input_error_handler, main
+from cpu_load_generator._interface import load_all_cores, load_single_core
 
 
 cpu_count = 8
@@ -63,13 +66,53 @@ def test_input_error_handler_cpu_load():
     mock_args.print_help.assert_called_once()
 
 
-def test_input_interface():
-    pass
+@patch('cpu_load_generator.__main__.argparse')
+@patch('cpu_load_generator.__main__.load_single_core')
+def test_main_calls_load_single_core(load_single_core_mock, argparse_mock):
+    """Test load_single_core is executed as expected.
+
+    :param Mock argparse_mock: argparse module mock
+
+    """
+    ParseArgsRetValue = namedtuple('ParseArgsRetValue', 'cpu_core duration cpu_load')
+
+    args_mock = Mock()
+    argparse_mock.ArgumentParser = Mock(return_value=args_mock)
+
+    args_mock.parse_args = Mock(return_value=ParseArgsRetValue(cpu_core=0, duration=10,
+                                                               cpu_load=0.5))
+    main()
+
+    load_single_core_mock.assert_called_once()
 
 
-def test_load_all_cores():
-    pass
+@patch('cpu_load_generator.__main__.argparse')
+@patch('cpu_load_generator.__main__.load_all_cores')
+def test_main_calls_load_all_cores(load_all_cores_mock, argparse_mock):
+    """Test load_all_cores is executed as expected.
+
+    :param Mock argparse_mock: argparse module mock
+
+    """
+    ParseArgsRetValue = namedtuple('ParseArgsRetValue', 'cpu_core duration cpu_load')
+
+    args_mock = Mock()
+    argparse_mock.ArgumentParser = Mock(return_value=args_mock)
+
+    args_mock.parse_args = Mock(return_value=ParseArgsRetValue(cpu_core=-1, duration=10,
+                                                               cpu_load=0.5))
+    main()
+
+    load_all_cores_mock.assert_called_once()
 
 
 def test_load_single_core():
-    pass
+    with patch('cpu_load_generator.common._monitor.psutil') as psutil_mock:
+        psutil_mock.cpu_percent = Mock(return_value=[50])
+        load_single_core(0, 1, 0.1)
+
+
+def test_load_all_cores():
+    with patch('cpu_load_generator.common._monitor.psutil') as psutil_mock:
+        psutil_mock.cpu_percent = Mock(return_value=[50])
+        load_all_cores(1, 0.1)
