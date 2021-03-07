@@ -33,7 +33,7 @@ def input_error_handler(args):
     if not args.cpu_core < cpu_count:
         args.print_help()
         raise ValueError('Core to load should not be higher than {}!'.format(cpu_count - 1))
-    if args.duration < 0:
+    if args.duration <= 0:
         args.print_help()
         raise ValueError('The load duration must be higher then 0!')
     if not 0 < args.cpu_load <= 1.0:
