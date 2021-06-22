@@ -74,13 +74,13 @@ def test_main_calls_load_single_core(load_single_core_mock, argparse_mock):
     :param Mock argparse_mock: argparse module mock
 
     """
-    ParseArgsRetValue = namedtuple('ParseArgsRetValue', 'cpu_core duration cpu_load')
+    ParseArgsRetValue = namedtuple('ParseArgsRetValue', 'cpu_core duration cpu_load path_to_profile_json')
 
     args_mock = Mock()
     argparse_mock.ArgumentParser = Mock(return_value=args_mock)
 
     args_mock.parse_args = Mock(return_value=ParseArgsRetValue(cpu_core=0, duration=10,
-                                                               cpu_load=0.5))
+                                                               cpu_load=0.5, path_to_profile_json=""))
     main()
 
     load_single_core_mock.assert_called_once()
@@ -94,13 +94,13 @@ def test_main_calls_load_all_cores(load_all_cores_mock, argparse_mock):
     :param Mock argparse_mock: argparse module mock
 
     """
-    ParseArgsRetValue = namedtuple('ParseArgsRetValue', 'cpu_core duration cpu_load')
+    ParseArgsRetValue = namedtuple('ParseArgsRetValue', 'cpu_core duration cpu_load path_to_profile_json')
 
     args_mock = Mock()
     argparse_mock.ArgumentParser = Mock(return_value=args_mock)
 
     args_mock.parse_args = Mock(return_value=ParseArgsRetValue(cpu_core=-1, duration=10,
-                                                               cpu_load=0.5))
+                                                               cpu_load=0.5, path_to_profile_json=""))
     main()
 
     load_all_cores_mock.assert_called_once()

@@ -16,6 +16,44 @@ class ClosedLoopActuator:
 
         self._actuation_period = 0.05
 
+    @property
+    def duration_s(self):
+        """"Get CPU load duration.
+
+        returns: duration of CPU load.
+
+        """
+        return self._duration_s
+
+    @duration_s.setter
+    def duration_s(self, duration_s):
+        """Set duration of CPU load.
+
+        param duration_s: duration of CPU load in seconds
+        type duration_s: int, float
+
+        """
+        self._duration_s = duration_s
+
+    @property
+    def cpu_target(self):
+        """Get CPU load target.
+
+        returns: CPU load target.
+
+        """
+        return self._cpu_target
+
+    @cpu_target.setter
+    def cpu_target(self, target_cpu_load):
+        """Set target CPU load.
+
+        param target_cpu_load: target CPU load as fractions of 1
+        type target_cpu_load: float
+
+        """
+        self._cpu_target = target_cpu_load
+
     def run(self):
         process = psutil.Process(os.getpid())
         process.cpu_affinity([self._cpu_core_num])
