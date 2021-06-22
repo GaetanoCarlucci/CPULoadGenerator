@@ -3,7 +3,7 @@ import argparse
 
 import psutil
 
-from cpu_load_generator import load_all_cores, load_single_core, _run_single_sequence
+from cpu_load_generator import load_all_cores, load_single_core, from_profile
 
 
 def parse_args(parser):
@@ -63,7 +63,7 @@ def main():
     input_error_handler(args)
 
     if args.path_to_profile_json != "":
-        _run_single_sequence(args.cpu_core, args.path_to_profile_json)
+        from_profile(args.path_to_profile_json)
     else:
         if args.cpu_core >= 0:
             load_single_core(args.cpu_core, args.duration, args.cpu_load)
