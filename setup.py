@@ -4,7 +4,7 @@ with open("README.md", "r") as fh:
     long_description = fh.read()
 
 setup(name='cpu-load-generator',
-      version='1.0.2',
+      version='1.2.0',
       description='CPU load generator',
       long_description=long_description,
       long_description_content_type='text/markdown',

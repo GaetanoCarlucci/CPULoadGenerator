@@ -37,6 +37,25 @@ class ControllerThread(Thread):
         """
         return self._current_cpu_load
 
+    @property
+    def target_cpu_load(self):
+        """Get the target CPU load.
+
+        returns: target CPU load
+
+        """
+        return self._target_cpu_load
+
+    @target_cpu_load.setter
+    def target_cpu_load(self, load):
+        """Set target CPU load.
+
+        param load: set target CPU load
+        type load: float
+
+        """
+        self._target_cpu_load = load
+
     @cpu.setter
     def cpu(self, value):
         """Set the current CPU load."""
