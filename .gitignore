@@ -3,3 +3,7 @@
 *egg-info
 .idea
 venv*
+htmlcov
+.coverage
+.tox
+.gitignore
