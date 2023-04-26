@@ -135,6 +135,11 @@ def __validate_sampling_interval(ctx, param, value):
                    'for the internal PI controller. '
                    'Changing this value is strongly discouraged!',
               callback=__validate_sampling_interval)
+
+@click.option('--frequency', '-f',
+              type=float, multiple=True,
+              help='',
+              default=[0.2], show_default=True, callback=__validate_cpu_load)
 def __main(core, cpu_load, duration, plot, sampling_interval):
     if plot and duration < 0:
         raise click.BadOptionUsage(

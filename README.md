@@ -47,7 +47,7 @@ Alternatively, install dependencies system-wide using apt:
 
     $ sudo apt install python3-matplotlib python3-psutil python3-click
 
-
+433534
 Examples
 -------------
 1. Generate 20% of load on core 0 for 20 seconds: ::
