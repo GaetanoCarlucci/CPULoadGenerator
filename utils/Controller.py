@@ -16,7 +16,7 @@ class ControllerThread(Thread):
         self.sleep_lock = RLock()
         self.cpu_lock = RLock()
         self.target_lock = RLock()
-
+        self.freq_lock = RLock()
         self.running = 1  # thread status
         self.sampling_interval = interval
         self.period = 0.1  # actuation period  in seconds
@@ -25,6 +25,7 @@ class ControllerThread(Thread):
         self.alpha = 0.2  # filter coefficient
         self.CT = 0.20  # target CPU load should be provided as input 
         self.cpu = 0  # current CPU load returned from the Monitor thread
+        self.freq = 0 # current CPU freq returned from the Monitor thread
         self.cpuPeriod = 0.03
         if ki is None:
             self.ki = 0.2  # integral constant of th PI regulator
@@ -60,10 +61,17 @@ class ControllerThread(Thread):
                     1 - self.alpha) * self.cpu
             # first order filter on the
             # measurement samples
+    def set_freq(self,freq):
+        with self.freq_lock:
+            self.freq_lock = freq
 
     def get_cpu(self):
         with self.cpu_lock:
             return self.cpu
+        
+    def get_freq(self):
+        with self.freq_lock:
+            return self.freq
 
     def run(self):
         def cpu_model(cpu_period):

@@ -50,8 +50,11 @@ Alternatively, install dependencies system-wide using apt:
 433534
 Examples
 -------------
-1. Generate 20% of load on core 0 for 20 seconds: ::
 
+export LC_ALL=en_US.utf-8
+export LANG=en_US.utf-8
+1. Generate 20% of load on core 0 for 20 seconds: ::
+    ./CPULoadGenerator.py -l 0.2 -d 5 -c 0 --plot
     ./CPULoadGenerator.py -l 0.2 -d 20 -c 0
 
 2. Generate 65% load on cores 0, 1 and 5, until the program is interrupted through Ctrl-C: ::

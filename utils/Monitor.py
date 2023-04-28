@@ -17,18 +17,18 @@ class MonitorThread(Thread):
         self.shutdown_flag = Event()
         self.sleep_lock = RLock()
         self.cpu_lock = RLock()
-
+        self.freq_lock = RLock()
         self.sampling_interval = interval  # sample time interval
         self.sample = 0.5  # cpu load measurement sample
         self.cpu = 0.5  # cpu load filtered
-
+        self.freq = 0
         self.alpha = 1  # filter coefficient
         self.sleepTimeTarget = 0.03
         self.sleepTime = 0.03
         self.cpuTarget = 0.5
         self.cpu_core = cpu_core
         self.dynamics = {"time"     : [], "cpu": [], "sleepTimeTarget": [],
-                         "cpuTarget": [], "sleepTime": [], }
+                         "cpuTarget": [], "sleepTime": []}
         super(MonitorThread, self).__init__()
 
     def stop(self):
@@ -55,6 +55,15 @@ class MonitorThread(Thread):
     def get_dynamics(self):
         return self.dynamics
 
+    def get_freq(self):
+        with self.freq_lock:   
+            return self.freq
+
+    def set_freq(self,freq):
+        with self.freq_lock:
+            self.freq = freq
+
+
     def run(self):
         start_time = time.time()
         p = psutil.Process(os.getpid())
@@ -72,6 +81,9 @@ class MonitorThread(Thread):
             self.sample = p.cpu_percent(self.sampling_interval)
             self.set_cpu_load(self.alpha * self.sample + (
                     1 - self.alpha) * self.cpu)
+            curr_freq = os.popen(f"cat /sys/devices/system/cpu/cpu{self.cpu_core}/cpufreq/scaling_cur_freq").readlines()[0].replace('\n','')
+            print(curr_freq)
+            # self.set_freq(int(curr_freq))
             # first order filter on the
             # measurement samples
             
@@ -81,3 +93,4 @@ class MonitorThread(Thread):
             self.dynamics['sleepTimeTarget'].append(self.sleepTimeTarget)
             self.dynamics['sleepTime'].append(self.sleepTime)
             self.dynamics['cpuTarget'].append(self.cpuTarget)
+            # self.dynamics['freq'].append(self.cpuTarget)

@@ -17,12 +17,17 @@ class RealTimePlot:
         plt.show()
         plt.xlabel('Time(sec)')
         plt.ylabel('%')
+        
+        # fig, ax1 = plt.subplots()
+        # ax2 = ax1.twinx()
         self.y_load = [0]
         self.cpuT = target;
         self.y_target = [0]
         self.xdata = [0]
+        self.y_freq = [0]
         self.line_load, = plt.plot(self.y_load)
         self.line_target, = plt.plot(self.y_target)
+        # self.line_freq, = ax2.plot(self.y_freq)
         self.cpu_idx = cpu
         if target != 0:
             plt.legend([self.line_target, self.line_load],
@@ -32,7 +37,7 @@ class RealTimePlot:
         plt.grid(True)
         self.ts_start = time.time()
 
-    def plot_sample(self, sample, target):
+    def plot_sample(self, sample, target, freq=0):
         p_x = time.time() - self.ts_start
         p_load = sample
         self.xdata.append(p_x)
@@ -41,6 +46,11 @@ class RealTimePlot:
             self.y_target.append(p_target)
             self.line_target.set_xdata(self.xdata)
             self.line_target.set_ydata(self.y_target)
+            # self.y_freq.append(freq)
+            # self.line_freq.set_xdata(self.xdata)
+            # self.line_freq.set_ydata(self.y_freq)
+        # if freq!=0:
+            
         self.y_load.append(p_load)
         self.line_load.set_xdata(self.xdata)
         self.line_load.set_ydata(self.y_load)
