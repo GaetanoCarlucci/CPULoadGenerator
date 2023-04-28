@@ -82,7 +82,7 @@ class MonitorThread(Thread):
             self.set_cpu_load(self.alpha * self.sample + (
                     1 - self.alpha) * self.cpu)
             curr_freq = os.popen(f"cat /sys/devices/system/cpu/cpu{self.cpu_core}/cpufreq/scaling_cur_freq").readlines()[0].replace('\n','')
-            print(curr_freq)
+            # print(curr_freq)
             # self.set_freq(int(curr_freq))
             # first order filter on the
             # measurement samples

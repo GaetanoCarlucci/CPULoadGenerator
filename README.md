@@ -47,14 +47,19 @@ Alternatively, install dependencies system-wide using apt:
 
     $ sudo apt install python3-matplotlib python3-psutil python3-click
 
-433534
+
+## 参数解释:
+1. --core -c 用于指定CPU核心ID
+2. --cpu_load -l 用于指定CPU核心利用率，取值范围：0~1，0.2表示20%的利用率
+3. --duration -d 用于指定执行时间，单位为秒
+4. -frequency -f 用于指定CPU p-state，0: conservative, 1: powersave, 2: ondemand, 3: performance
+
+
 Examples
 -------------
 
-export LC_ALL=en_US.utf-8
-export LANG=en_US.utf-8
 1. Generate 20% of load on core 0 for 20 seconds: ::
-    ./CPULoadGenerator.py -l 0.2 -d 5 -c 0 --plot
+    ./CPULoadGenerator.py -l 0.2 -d 5 -c 0 -f 2 --plot
     ./CPULoadGenerator.py -l 0.2 -d 20 -c 0
 
 2. Generate 65% load on cores 0, 1 and 5, until the program is interrupted through Ctrl-C: ::
