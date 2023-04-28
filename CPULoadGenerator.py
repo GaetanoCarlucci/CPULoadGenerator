@@ -137,10 +137,14 @@ def __validate_sampling_interval(ctx, param, value):
               callback=__validate_sampling_interval)
 
 @click.option('--frequency', '-f',
-              type=float, multiple=True,
-              help='',
-              default=[0.2], show_default=True, callback=__validate_cpu_load)
-def __main(core, cpu_load, duration, plot, sampling_interval):
+              type=int, default=-1, show_default=True,
+              help='Control cpu p-state by setting cpu frequency'
+              '-1: no change, 0: defalut p-state,1: min, 2: middle, 3: max'
+                   )
+
+
+
+def __main(core, cpu_load, duration, plot, sampling_interval,frequency):
     if plot and duration < 0:
         raise click.BadOptionUsage(
             'Plot option can only be used with a fixed duration.')
@@ -149,7 +153,53 @@ def __main(core, cpu_load, duration, plot, sampling_interval):
         raise click.BadOptionUsage('Number of cores and loads does not match.')
     elif len(cpu_load) == 1:
         cpu_load = itertools.repeat(cpu_load[0], len(core))
+        
+    """
+    apt-get install cpufrequtils
+    要设置CPU频率，您可以使用以下命令格式：
+    ```
+    sudo cpufreq-set -c <CPU编号> -u <最大频率> -d <最小频率> -g <性能模式>
+    
+    sudo cpufreq-set -c 0 -d 1400000 -u 1800000 -g performance
+    ```
 
+    其中，-c参数用于指定CPU编号，如果您的系统只有一个CPU，可以忽略此参数；-f参数用于指定最大频率，单位是千赫兹；-u参数用于指定最小频率；-g参数用于指定性能模式，您可以选择以下其中一个：
+
+    - performance：最高性能模式
+    - powersave：最低功耗模式
+    - ondemand：根据使用情况动态调整频率
+    - conservative：类似于ondemand，但尽可能在较低频率下运行以节省更多功耗
+
+    例如，如果您要将CPU最大频率设置为2.5 GHz，最小频率设置为1 GHz，性能模式设置为powersave，可以使用以下命令：
+
+    ```
+    sudo cpufreq-set -f 2500000 -u 1000000 -g powersave
+    ```
+
+    需要注意的是，这只是临时设置，重启系统后会失效。如果您想让设置永久生效，需要编辑CPU频率配置文件，在其中添加类似上面命令的配置。
+    """
+    if frequency==-1:
+        all_ava_freq = os.popen("cat /sys/devices/system/cpu/cpu0/cpufreq/scaling_available_frequencies").readlines()[0].replace('\n','')
+        curr_freq = os.popen("cat /sys/devices/system/cpu/cpu0/cpufreq/scaling_cur_freq").readlines()[0].replace('\n','')
+        print(f"all avaliable frequency: {all_ava_freq}\ncurrent cpu frequency: {curr_freq}")
+    elif frequency==0:
+        res = os.popen("cpufreq-set -r").readlines()[0].replace('\n','')
+        print(res)
+    elif frequency==1:
+        min_freq = os.popen("cat /sys/devices/system/cpu/cpu0/cpufreq/scaling_available_frequencies | awk '{print $NF}'").readlines()[0].replace('\n','')
+        print(f"set min cpu frequency {min_freq}")
+        res = os.popen(f'cpufreq-set -f {min_freq}').readlines()
+        print(res)
+    elif frequency==2:
+        middle_freq = os.popen("cat /sys/devices/system/cpu/cpu0/cpufreq/scaling_available_frequencies | awk '{print $2}'").readlines()[0].replace('\n','')
+        print(f"set middle cpu frequency {middle_freq}")
+        res = os.popen(f'cpufreq-set -f {middle_freq}').readlines()
+        print(res)
+    elif frequency==3:
+        max_freq = os.popen("cat /sys/devices/system/cpu/cpu0/cpufreq/scaling_available_frequencies | awk '{print $1}'").readlines()[0].replace('\n','')
+        print(f"set max cpu frequency {max_freq}")
+        res = os.popen(f'cpufreq-set -f {max_freq}').readlines()
+        print(res)
     # filter out repeated core indexes
     core = list(set(core))
 
