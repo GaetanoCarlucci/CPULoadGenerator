@@ -4,7 +4,8 @@
 import time
 import matplotlib.pyplot as plt
 
-class realTimePlot():
+
+class RealtimePlot:
     """
         Plots the CPU load
     """
@@ -16,15 +17,15 @@ class realTimePlot():
         plt.xlabel('Time(sec)')
         plt.ylabel('%')
         self.y_load = [0]
-        self.cpuT = target;
+        self.cpuT = target
         self.y_target = [0]
         self.xdata = [0]       
         self.line_load, = plt.plot(self.y_load)
         self.line_target, = plt.plot(self.y_target)
         if target != 0:
-            plt.legend([self.line_target, self.line_load], ["Target CPU", "CPU [%d] Load" % (cpu)], ncol=2)
+            plt.legend([self.line_target, self.line_load], ["Target CPU", "CPU [%d] Load" % cpu], ncol=2)
         else:
-            plt.legend([self.line_load], ["CPU [%d] Load" % (cpu)], ncol=1)
+            plt.legend([self.line_load], ["CPU [%d] Load" % cpu], ncol=1)
         plt.grid(True)
         self.ts_start = time.time()
 
@@ -44,6 +45,6 @@ class realTimePlot():
 
     def close(self):
         if self.cpuT != 0:
-            name = "%d%%-Target-Load" % (self.cpuT*100)+ ".png"
+            name = "%d%%-Target-Load.png" % (self.cpuT*100)
             plt.savefig(name, dpi=100)
-        plt.close();
+        plt.close()

@@ -3,9 +3,10 @@
 
 import time
 
-from Plot import realTimePlot
+from Plot import RealtimePlot
 
-class openLoopActuator():
+
+class OpenLoopActuator():
     """
         Generates CPU load by tuning the sleep time
     """
@@ -17,7 +18,7 @@ class openLoopActuator():
         self.period = 0.05 # actuation period  in seconds
         self.cpu_core = cpu_core
         if self.plot:
-            self.graph = realTimePlot(self.duration, cpu_core, 0)
+            self.graph = RealtimePlot(self.duration, cpu_core, 0)
 
     def setSleepTime(self, sleep_time):
         self.sleep_time = sleep_time
@@ -36,7 +37,7 @@ class openLoopActuator():
     def generate_load(self, sleep_time):
         interval = time.time() + self.period - sleep_time
         # generates some getCpuLoad for interval seconds
-        while (time.time() < interval):
+        while time.time() < interval:
             pr = 213123  # generates some load
             pr * pr
             pr = pr + 1
@@ -49,14 +50,14 @@ class openLoopActuator():
 
     def run(self):
         duration  = time.time() + self.duration
-        while (time.time() < duration):
+        while time.time() < duration:
             self.generate_load(self.checkSleepTime(self.sleep_time))
             self.sendPlotSample()
 
     def run_sequence(self, sequence):       
         for SleepTimeTarget in sequence:
-            stepPeriod = time.time() + 4
+            step_period = time.time() + 4
             self.monitor.setSleepTimeTarget(SleepTimeTarget)
-            while (time.time() < stepPeriod):
+            while time.time() < step_period:
                 self.generate_load(self.checkSleepTime(SleepTimeTarget))
                 self.sendPlotSample()
