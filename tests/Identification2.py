@@ -1,22 +1,13 @@
 #!/usr/bin/python
-
 #Authors: Gaetano Carlucci
 #         Giuseppe Cofano
-
-
-import time
 import json
 import matplotlib.pyplot as plt
 
-import sys
-import os
-sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)) + '/../utils')
+from utils.Monitor import MonitorThread
+from utils.OpenLoopActuator import OpenLoopActuator
 
-from Monitor import MonitorThread
-from openLoopActuator import openLoopActuator
- 
 if __name__ == "__main__":
-   
     ######################################################
     #             IDENTIFICATION TEST                    #
     ######################################################
@@ -32,7 +23,7 @@ if __name__ == "__main__":
         stepPeriod = 4
         monitor = MonitorThread(0, 0.1)
         monitor.start()
-        actuator = openLoopActuator(monitor, len(sleepTimeSequence) * stepPeriod, 0, dynamics_plot_online)
+        actuator = OpenLoopActuator(monitor, len(sleepTimeSequence) * stepPeriod, 0, dynamics_plot_online)
         actuator.run_sequence(sleepTimeSequence)
         
         monitor.running = 0
@@ -54,7 +45,6 @@ if __name__ == "__main__":
     ax1.grid(True)
     for tl in ax1.get_yticklabels():
         tl.set_color('b')
-    
 
     ax2 = plt.twinx()
     ax2.set_ylabel('Sleep Time Target(s)', color='r')

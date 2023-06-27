@@ -1,26 +1,21 @@
 #!/usr/bin/python
-
 #Authors: Gaetano Carlucci
 #         Giuseppe Cofano
-
-
 import json
 import matplotlib.pyplot as plt
 
-import sys
-import os
-sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)) + '/../utils')
+from utils.Monitor import MonitorThread
+from utils.OpenLoopActuator import OpenLoopActuator
 
-from Monitor import MonitorThread
-from openLoopActuator import openLoopActuator
+period = 0.05
 
-period = 0.05 
 
 def cpu_model(cpu_target):
     cpu_time = cpu_target * period
     sleepTime = period - cpu_time
     return sleepTime
- 
+
+
 if __name__ == "__main__":
     cpuSequence = [0.1, 0.8, 0.30, 0.70, 0.40, 0.10, 0.20, 0.60, 0.20, 0.70]
     ######################################################
@@ -32,20 +27,20 @@ if __name__ == "__main__":
     dynamics_plot_online = 0
     if testing == 1:
     
-        sleepTimeTest = [ cpu_model(x) for x in cpuSequence]
+        sleepTimeTest = [cpu_model(x) for x in cpuSequence]
 
-        data = {"x":[], "y":[]}
+        data = {"x": [], "y": []}
         for sleepTime in sleepTimeTest:
             monitor = MonitorThread(0, 0.1)
             monitor.setSleepTimeTarget(sleepTime)
             monitor.start()
 
-            actuator = openLoopActuator(monitor, 10, 0, dynamics_plot_online)
+            actuator = OpenLoopActuator(monitor, 10, 0, dynamics_plot_online)
             actuator.setSleepTime(sleepTime)
             actuator.run()
             
             monitor.running = 0
-            dynamics =  monitor.getDynamics()
+            dynamics = monitor.getDynamics()
             actuator.close()
             monitor.join()
 
