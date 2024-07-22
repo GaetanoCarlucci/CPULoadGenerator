@@ -16,6 +16,10 @@ A PI controller is employed for this purpose.
 The script takes in input the desired CPU load and the CPU core on which the load has to be generated.
 The controller and the CPU monitor are implemented in two different threads.
 
+Theoretical insight on this tool
+**********************
+On my [blog](https://gaetanocarlucci.altervista.org/cpu-load-generator-project/). is available a theoretical explanation on this tool
+
 Dependencies
 -------------
 
