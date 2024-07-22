@@ -17,7 +17,7 @@ The script takes in input the desired CPU load, the duration of the experiment a
 
 Theoretical insight on this tool
 **********************
-On my [blog](https://gaetanocarlucci.altervista.org/cpu-load-generator-project/). is available a theoretical explanation on this tool
+On my `blog <https://gaetanocarlucci.altervista.org/cpu-load-generator-project/>`_ is available a theoretical explanation of this tool
 
 
 Python 3
