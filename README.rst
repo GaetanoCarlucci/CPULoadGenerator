@@ -18,7 +18,7 @@ The controller and the CPU monitor are implemented in two different threads.
 
 Theoretical insight on this tool
 **********************
-On my `blog <https://gaetanocarlucci.altervista.org/cpu-load-generator-project/>`_ is available a theoretical explanation of this tool
+On my `blog <https://gaetanocarlucci.altervista.org/cpu-load-generator-project/>`_ is available a theoretical explanation of this tool.
 
 Dependencies
 -------------
