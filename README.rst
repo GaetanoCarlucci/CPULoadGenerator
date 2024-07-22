@@ -15,6 +15,11 @@ CPU Load Generator (Python 2)
 This script allows to generate a fixed CPU load for a finite time period. To the purpose, a PI controller is employed. 
 The script takes in input the desired CPU load, the duration of the experiment and the CPU core on which the load has to be generated. The controller and the CPU monitor are implemented in two different threads.
 
+Theoretical insight on this tool
+**********************
+On my [blog](https://gaetanocarlucci.altervista.org/cpu-load-generator-project/). is available a theoretical explanation on this tool
+
+
 Python 3
 **********************
 
