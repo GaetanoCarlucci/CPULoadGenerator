@@ -16,32 +16,20 @@ jobs:
       matrix:
         python-version: ["3.4"]
 
-    env:
-      DISPLAY: ":99.0"
-
     steps:
       - name: Check out the repository
         uses: actions/checkout@v3
         
-      - name: Install pyenv
-        run: |
-          curl https://pyenv.run | bash
-          echo 'export PATH="$HOME/.pyenv/bin:$PATH"' >> ~/.bashrc
-          echo 'eval "$(pyenv init --path)"' >> ~/.bashrc
-          echo 'eval "$(pyenv init -)"' >> ~/.bashrc
-          echo 'eval "$(pyenv virtualenv-init -)"' >> ~/.bashrc
-          source ~/.bashrc
-          pyenv install ${{ matrix.python-version }}
-          pyenv global ${{ matrix.python-version }}
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v4
+        with:
+          python-version: ${{ matrix.python-version }}
 
-      - name: Verify Python version
-        run: python --version
-        
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
           pip install -r requirements.txt
-     
+      
       - name: Run tests
         run: |
           python tests/PID.py
