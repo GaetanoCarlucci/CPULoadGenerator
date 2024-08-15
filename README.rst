@@ -1,9 +1,9 @@
 CPU Load Generator
 ==============
-|travis-badge|_ |mit-badge|_ |made-with-python|_
+|github-actions-badge|_ |mit-badge|_ |made-with-python|_
 
-.. |travis-badge| image:: https://travis-ci.org/GaetanoCarlucci/CPULoadGenerator.svg?branch=master
-.. _travis-badge: https://travis-ci.org/GaetanoCarlucci/CPULoadGenerator
+.. |github-actions-badge| image:: https://img.shields.io/github/workflow/status/GaetanoCarlucci/CPULoadGenerator/Python%20CI?label=build
+.. _github-actions-badge: https://github.com/GaetanoCarlucci/CPULoadGenerator/actions
 
 .. |mit-badge| image:: https://img.shields.io/:license-mit-green.svg?style=flat
 .. _mit-badge: http://opensource.org/licenses/MIT
