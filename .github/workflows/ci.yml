@@ -3,10 +3,10 @@ name: Python3 CI
 on:
   push:
     branches:
-      - Python3
+      - master
   pull_request:
     branches:
-      - Python3
+      - master
 
 jobs:
   build:
