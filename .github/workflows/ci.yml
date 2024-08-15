@@ -4,11 +4,9 @@ on:
   push:
     branches:
       - master
-      - Python3
   pull_request:
     branches:
       - master
-      - Python3
 
 jobs:
   build:
@@ -16,7 +14,7 @@ jobs:
     
     strategy:
       matrix:
-        python-version: ${{ matrix-python-versions }}
+        python-version: ["2.7", "3.2", "3.3", "3.4"]
 
     env:
       DISPLAY: ":99.0"
@@ -46,9 +44,3 @@ jobs:
         run: |
           python tests/PID.py
           python tests/feedForward.py
-
-  matrix-python-versions:
-    master:
-      - ["2.7", "3.2", "3.3", "3.4"]
-    Python3:
-      - ["3.6", "3.7", "3.8", "3.9"]
