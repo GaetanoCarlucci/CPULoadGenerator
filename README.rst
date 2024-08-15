@@ -2,7 +2,7 @@ CPU Load Generator
 ==============
 |github-actions-badge|_ |mit-badge|_ |made-with-python|_
 
-.. |github-actions-badge| image:: https://img.shields.io/github/actions/workflow/status/GaetanoCarlucci/CPULoadGenerator/ci?branch=master
+.. |github-actions-badge| image:: https://img.shields.io/github/actions/workflow/status/:user/:repo/:workflow
 .. _github-actions-badge: https://github.com/GaetanoCarlucci/CPULoadGenerator/actions
 
 .. |mit-badge| image:: https://img.shields.io/:license-mit-green.svg?style=flat
