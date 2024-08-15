@@ -1,4 +1,4 @@
-CPU Load Generator (Python 3)
+CPU Load Generator
 ==============
 |travis-badge|_ |mit-badge|_ |made-with-python|_
 
