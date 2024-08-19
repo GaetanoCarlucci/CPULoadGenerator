@@ -20,7 +20,7 @@ Theoretical insight on this tool
 **********************
 On my `blog <https://gaetanocarlucci.altervista.org/cpu-load-generator-project/>`_ is available a theoretical explanation of this tool.
 
-**********************
+
 Dependencies
 -------------
 
