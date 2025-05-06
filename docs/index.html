@@ -1,6 +1,6 @@
 ---
-layout: default            # use the layout that ships with jekyll-theme-minimal
-title: CPU Load Generator   # appears in the <title> tag and navbar (if any)
+layout: default            # jekyll-theme-minimal supplies this layout
+title: CPU Load Generator
 ---
 
 <!-- lightweight, self‑contained styling -->
@@ -57,13 +57,12 @@ title: CPU Load Generator   # appears in the <title> tag and navbar (if any)
   }
 </style>
 
-<!-- ===== Hero ===== -->
 <header>
   <h1>CPU Load Generator</h1>
   <p>
     Generate a fixed, precisely regulated CPU load with a lean Python script that uses a PID controller.<br />
     <a href="https://github.com/GaetanoCarlucci/CPULoadGenerator"
-       target="_blank" rel="noopener">View the project on GitHub ↗︎</a>
+       target="_blank" rel="noopener">View the project on GitHub ↗︎</a>
   </p>
 </header>
 
@@ -76,11 +75,11 @@ title: CPU Load Generator   # appears in the <title> tag and navbar (if any)
       <strong>stable CPU load for a finite period</strong> by closing the loop with a PID regulator.
     </p>
     <ul>
-      <li><strong>Performance&nbsp;testing:&nbsp;</strong>Stress‑test applications and full systems to uncover bottlenecks and verify robustness under load.</li>
-      <li><strong>Resource‑allocation optimisation:&nbsp;</strong>Reproduce real‑world utilisation scenarios so you can fine‑tune CPU quotas and scheduling policies.</li>
-      <li><strong>Benchmarking:&nbsp;</strong>Generate a consistent, repeatable workload that makes it easy to compare CPUs, machines, or configurations.</li>
-      <li><strong>Education&nbsp;&amp;&nbsp;training:&nbsp;</strong>Give students hands‑on experience with discrete PID control and demonstrate how load impacts performance.</li>
-      <li><strong>Thermal&nbsp;/&nbsp;power analysis:&nbsp;</strong>Investigate heat dissipation and energy consumption under a controlled, steady workload.</li>
+      <li><strong>Performance&nbsp;testing:</strong> Stress‑test applications and full systems to uncover bottlenecks and verify robustness under load.</li>
+      <li><strong>Resource‑allocation optimisation:</strong> Reproduce real‑world utilisation scenarios so you can fine‑tune CPU quotas and scheduling policies.</li>
+      <li><strong>Benchmarking:</strong> Generate a consistent, repeatable workload that makes it easy to compare CPUs, machines, or configurations.</li>
+      <li><strong>Education&nbsp;&amp;&nbsp;training:</strong> Give students hands‑on experience with discrete PID control and demonstrate how load impacts performance.</li>
+      <li><strong>Thermal&nbsp;/&nbsp;power analysis:</strong> Investigate heat dissipation and energy consumption under a controlled, steady workload.</li>
     </ul>
   </section>
 
@@ -110,12 +109,62 @@ title: CPU Load Generator   # appears in the <title> tag and navbar (if any)
       (<code>K<sub>i</sub></code>) actions. The derivative term is not used.
     </p>
 
-```python
-# actuator snippet
+    <pre><code># actuator snippet
 def generate_load(self, sleep_time):
     interval = time.time() + self.period - sleep_time
     while time.time() < interval:
         pr = 213123        # busy‑work
         _ = pr * pr
         pr = pr + 1
-    time.sleep(sleep_time)
+    time.sleep(sleep_time)</code></pre>
+
+    <pre><code># main PI control loop
+def run(self):
+    def cpu_model(cpu_period):
+        return self.period - cpu_period  # maps period to sleep time
+
+    self.shutdown_flag.clear()
+    while not self.shutdown_flag.is_set():
+        time.sleep(self.sampling_interval)
+
+        with self.target_lock, self.cpu_lock:
+            CT  = self.CT        # target load
+            cpu = self.cpu       # measured load
+
+        self.err      = CT - cpu * 0.01
+        ts            = time.time()
+        samp_int      = ts - self.last_ts
+        self.int_err += self.err * samp_int
+        self.last_ts  = ts
+        self.cpuPeriod = (self.kp * self.err +
+                          self.ki * self.int_err)
+
+        # anti‑windup
+        self.cpuPeriod = max(0, min(self.cpuPeriod, self.period))
+        self.set_sleep_time(cpu_model(self.cpuPeriod))</code></pre>
+
+    <h3>PI tuning insights</h3>
+    <p>
+      Raising <code>K<sub>p</sub></code> speeds up the response but risks overshoot; adding an
+      integral term removes steady‑state error at the cost of sluggishness
+      and potential oscillations, so anti‑windup is essential.
+    </p>
+  </section>
+
+  <!-- ===== Results ===== -->
+  <section id="results">
+    <h2>Results</h2>
+    <p>
+      Quick test in a GitHub Codespace or local shell:<br>
+      <code>./CPULoadGenerator.py -c 0 -c 3 -l 0.55 -l 0.12</code>
+    </p>
+
+    <p>Example 50 % target load on core 0 for 20 s:</p>
+    <img src="https://gaetanocarlucci.altervista.org/wp-content/uploads/2024/07/50-Target-Load.png"
+         alt="CPU‑load plot" loading="lazy">
+  </section>
+</main>
+
+<footer>
+  MIT License &bull; © 2025 Gaetano Carlucci
+</footer>
