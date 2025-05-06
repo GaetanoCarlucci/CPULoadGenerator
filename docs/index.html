@@ -112,21 +112,21 @@
         The architecture uses two threads: a <em>Monitor Thread</em> that measures CPU
         utilisation and a <em>Controller Thread</em> that applies PI control to adjust
         the sleep time of a tight loop so the measured load matches the
-        target. :contentReference[oaicite:1]{index=1}
+        target.
       </p>
 
       <h3>Monitor Thread</h3>
       <p>
         Samples CPU usage at a fixed interval via
         <code>psutil.cpu_percent(interval)</code>, filters the measurements with a
-        first‑order filter and logs the results. :contentReference[oaicite:2]{index=2}
+        first‑order filter and logs the results.
       </p>
 
       <h3>Controller Thread</h3>
       <p>
         Compares the target load (<em>set‑point</em>) and actual load, then computes the
         control signal using proportional (<code>K<sub>p</sub></code>) and integral
-        (<code>K<sub>i</sub></code>) actions. The derivative term is not used. :contentReference[oaicite:3]{index=3}
+        (<code>K<sub>i</sub></code>) actions. The derivative term is not used. 
       </p>
 
       <pre><code># actuator snippet
@@ -167,7 +167,7 @@ def run(self):
       <p>
         Raising <code>K<sub>p</sub></code> speeds up the response but risks overshoot; adding an
         integral term removes steady‑state error at the cost of sluggishness
-        and potential oscillations, so anti‑windup is essential. :contentReference[oaicite:4]{index=4}
+        and potential oscillations, so anti‑windup is essential.
       </p>
     </section>
 
