@@ -1,0 +1,3 @@
+title: CPU Load Generator
+description: Generate a steady CPU load with a PI controller
+theme: jekyll-theme-minimal      # one of GitHub’s built‑in themes
