@@ -61,33 +61,47 @@
 </head>
 <body>
 
-  <!-- ===== Hero ===== -->
-  <header>
-    <h1>CPU Load Generator</h1>
+<!-- ===== Hero ===== -->
+<header>
+  <h1>CPU Load Generator</h1>
+  <p>
+    Generate a fixed, precisely regulated CPU load with a lean Python script that uses a PID controller.<br />
+    <a href="https://github.com/GaetanoCarlucci/CPULoadGenerator"
+       target="_blank" rel="noopener">View the project on GitHub ↗︎</a>
+  </p>
+</header>
+<main>
+
+  <!-- ===== Motivation ===== -->
+  <section id="motivation">
+    <h2>Motivation</h2>
     <p>
-      Generate a steady CPU load with a simple PID‑based Python script.<br />
-      <a href="https://github.com/GaetanoCarlucci/CPULoadGenerator"
-         target="_blank" rel="noopener">View the project on GitHub ↗︎</a>
+      This project shows system administrators, developers, and researchers how to create a
+      <strong>stable CPU load for a finite period</strong> by closing the loop with a PID regulator.
     </p>
-  </header>
-
-  <main>
-
-    <!-- ===== Motivation ===== -->
-    <section id="motivation">
-      <h2>Motivation</h2>
-      <p>
-        This tool helps system administrators, developers and researchers 
-        create a <strong>fixed CPU load for a finite period</strong> using a PID regulator. :contentReference[oaicite:0]{index=0}
-      </p>
-      <ul>
-        <li><strong>Performance testing:</strong> stress‑test applications to uncover bottlenecks.</li>
-        <li><strong>Resource‑allocation optimisation:</strong> simulate load scenarios and tune CPU quotas.</li>
-        <li><strong>Benchmarking:</strong> create repeatable loads to compare hardware or configurations.</li>
-        <li><strong>Education &amp; training:</strong> demonstrate PID control and CPU‑load behaviour in practice.</li>
-        <li><strong>Thermal / power analysis:</strong> study heat dissipation and power draw under controlled load.</li>
-      </ul>
-    </section>
+    <ul>
+      <li>
+        <strong>Performance&nbsp;testing:&nbsp;</strong>
+        Stress‑test applications and full systems to uncover bottlenecks and verify robustness under load.
+      </li>
+      <li>
+        <strong>Resource‑allocation optimisation:&nbsp;</strong>
+        Reproduce real‑world utilisation scenarios so you can fine‑tune CPU quotas and scheduling policies.
+      </li>
+      <li>
+        <strong>Benchmarking:&nbsp;</strong>
+        Generate a consistent, repeatable workload that makes it easy to compare CPUs, machines, or configurations.
+      </li>
+      <li>
+        <strong>Education&nbsp;&amp;&nbsp;training:&nbsp;</strong>
+        Give students hands‑on experience with discrete PID control and demonstrate how load impacts performance.
+      </li>
+      <li>
+        <strong>Thermal&nbsp;/&nbsp;power analysis:&nbsp;</strong>
+        Investigate heat dissipation and energy consumption under a controlled, steady workload.
+      </li>
+    </ul>
+  </section>
 
     <!-- ===== PID Regulator ===== -->
     <section id="pid">
