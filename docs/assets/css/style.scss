@@ -3,8 +3,8 @@
 // 1 · load everything from jekyll‑theme‑minimal first
 @import "{{ site.theme }}";
 
-// 2 · hide the theme’s built‑in header (optional)
-.header {
+// 2 ·hide the theme’s built‑in banner
+.page-header {
   display: none;
 }
 
