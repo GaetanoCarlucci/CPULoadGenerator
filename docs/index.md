@@ -3,8 +3,6 @@ layout: default
 title: CPU Load Generator
 ---
 
-<a href="https://github.com/GaetanoCarlucci/CPULoadGenerator" style="position: absolute; top: 10px; left: 10px;">GitHub Repo</a>
-
 # CPU Load Generator Project
 
 Welcome to the CPU Load Generator project — a Python-based tool that generates a fixed CPU load for a finite period using a PID regulator.
