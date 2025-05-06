@@ -1,0 +1,64 @@
+---
+---
+// 1 · load everything from jekyll‑theme‑minimal first
+@import "{{ site.theme }}";
+
+// 2 · hide the theme’s built‑in header (optional)
+.header {
+  display: none;
+}
+
+// 3 · your custom palette & layout
+:root {
+  --accent: #0069d9;
+  --bg: #f7f9fc;
+  --text: #222;
+  --code-bg: #eee;
+}
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.6;
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+}
+
+/* hero section */
+.hero {
+  background: var(--accent);
+  color: #fff;
+  padding: 2rem 1rem;
+  text-align: center;
+}
+.hero h1 { margin: 0 0 .25rem; font-size: 2.25rem; }
+.hero a  { color: #fff; font-weight: 600; text-decoration: underline; }
+
+/* content containers */
+main { max-width: 58rem; margin: 2rem auto; padding: 0 1rem; }
+section {
+  background: #fff;
+  padding: 2rem 1.5rem;
+  margin-bottom: 2rem;
+  border-radius: .85rem;
+  box-shadow: 0 2px 6px rgba(0,0,0,.08);
+}
+
+/* misc tweaks */
+h2          { margin-top: 0; color: var(--accent); }
+h3, h4      { color: var(--accent); margin-bottom: .25rem; }
+img         { max-width: 100%; height: auto; border-radius: .5rem; }
+ul          { padding-left: 1.25rem; }
+pre, code   {
+  font-family: ui-monospace, "SFMono-Regular", Consolas, monospace;
+  background: var(--code-bg);
+  border-radius: .35rem;
+}
+pre         { padding: .75rem 1rem; overflow-x: auto; }
+
+/* footer */
+footer {
+  text-align: center;
+  padding: 1rem;
+  font-size: .9rem;
+  color: #666;
+}
