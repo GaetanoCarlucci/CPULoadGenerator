@@ -1,3 +1,4 @@
 title: CPU Load Generator
 description: A simple CPU load generator for Linux systems.
 url: "https://gaetanocarlucci.github.io/CPULoadGenerator"
+theme: minima
