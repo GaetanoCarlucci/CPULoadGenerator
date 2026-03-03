@@ -7,6 +7,7 @@ import itertools
 import multiprocessing
 import os
 import signal
+from typing import cast, Callable
 
 import click
 import psutil
@@ -18,7 +19,7 @@ from utils.Monitor import MonitorThread
 
 
 def _available_cores():
-    """Return list of available CPU core indices. Works on Linux, macOS, Windows."""
+    """Return list of available CPU core indices. Works on Linux, macOS, and Windows."""
     try:
         p = psutil.Process(os.getpid())
         return list(p.cpu_affinity())
@@ -97,28 +98,29 @@ def load_core(target_core, target_load,
         control.join()
 
 
-def __validate_cpu_load(ctx, param, value):
+def __validate_cpu_load(_ctx, _param, value):
     for v in value:
         if not 0. <= v <= 1.:
-            raise click.BadOptionUsage(f'CPU load {v} out of range [0, 1]')
+            msg = f'CPU load {v} out of range [0, 1]'
+            raise click.BadOptionUsage(message=msg, option_name='cpu_load')
     return value
 
 
-def __validate_cpu_core(ctx, param, value):
+def __validate_cpu_core(_ctx, _param, value):
     available_cores = _available_cores()
 
     for v in value:
         if v not in available_cores:
-            raise click.BadOptionUsage(
-                f'Target core ({v}) is not one of the available cores: '
-                f'{available_cores}')
+            msg = (f'Target core ({v}) is not one of the available cores: '
+                   f'{available_cores}')
+            raise click.BadOptionUsage(message=msg, option_name='core')
     return value
 
 
-def __validate_sampling_interval(ctx, param, value):
+def __validate_sampling_interval(_ctx, _param, value):
     if value < 0:
-        raise click.BadOptionUsage(
-            f'Sampling interval cannot be negative ({value}).')
+        msg = f'Sampling interval cannot be negative ({value}).'
+        raise click.BadOptionUsage(message=msg, option_name='sampling_interval')
     return value
 
 
@@ -143,7 +145,7 @@ def __validate_sampling_interval(ctx, param, value):
                    'program will run until a SIGINT or SIGTERM is received.')
 @click.option('--plot', '-p',
               is_flag=True, default=False, show_default=True,
-              help='Plot the resulting CPU load. '
+              help='Plot the resulting CPU load (and save a PNG at the end). '
                    'Can only be used with a fixed duration.')
 @click.option('--sampling_interval', '-s',
               type=float, default=0.1, show_default=True,
@@ -151,13 +153,15 @@ def __validate_sampling_interval(ctx, param, value):
                    'for the internal PI controller. '
                    'Changing this value is strongly discouraged!',
               callback=__validate_sampling_interval)
+
 def __main(core, cpu_load, duration, plot, sampling_interval):
     if plot and duration < 0:
-        raise click.BadOptionUsage(
-            'Plot option can only be used with a fixed duration.')
+        msg = 'Plot option can only be used with a fixed duration.'
+        raise click.BadOptionUsage(message=msg, option_name='plot')
 
     if len(cpu_load) > 1 and len(cpu_load) != len(core):
-        raise click.BadOptionUsage('Number of cores and loads does not match.')
+        msg = 'Number of cores and loads does not match.'
+        raise click.BadOptionUsage(message=msg, option_name='cpu_load')
     elif len(cpu_load) == 1:
         cpu_load = itertools.repeat(cpu_load[0], len(core))
 
@@ -169,7 +173,7 @@ def __main(core, cpu_load, duration, plot, sampling_interval):
         print('Plot disabled when using multiple cores (use -c 0 for single-core plot).')
         plot = False
 
-    # Single core + plot: run in main process so the live plot window works (e.g. on macOS)
+    # Single core + plot: run in main process so the live plot window works
     if len(core) == 1 and plot:
         load_core(core[0], next(cpu_load), duration, plot, sampling_interval)
         return
@@ -190,4 +194,4 @@ def __main(core, cpu_load, duration, plot, sampling_interval):
 
 
 if __name__ == '__main__':
-    __main()
+    cast(Callable[[], None], __main)()

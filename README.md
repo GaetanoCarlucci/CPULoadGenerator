@@ -8,6 +8,8 @@ This script generates a fixed CPU load for a finite or indefinite time period, o
 
 You provide the desired CPU load and the CPU core(s) to load. The controller and the CPU monitor run in separate threads.
 
+**Supported platforms:** Linux, macOS, and Windows (Windows is less tested; `psutil` supports CPU affinity on all three).
+
 ## Theoretical insight
 
 - **Project homepage:** [https://gaetanocarlucci.github.io/CPULoadGenerator/](https://gaetanocarlucci.github.io/CPULoadGenerator/) — more details on the tool.
