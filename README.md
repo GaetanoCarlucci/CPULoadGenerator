@@ -41,7 +41,7 @@ Or make the script executable and run: `chmod +x CPULoadGenerator.py` then `./CP
 
 **System-wide install (Debian/Ubuntu):** `sudo apt install python3-matplotlib python3-psutil python3-click`
 
-**Platform notes:** On **macOS**, CPU affinity is not supported, so the load may be distributed across cores; use **exactly one core** with `--plot` for the live plot window (e.g. `-c 0 -l 0.5 -d 20 --plot`). With multiple cores, the plot is saved to a PNG at the end. If the plot window does not appear, try `export MPLBACKEND=TkAgg` or `pip install pyobjc-framework-Cocoa`.
+**Platform notes:** On **macOS**, CPU affinity is not supported, so the load may be distributed across cores. Use **exactly one core** with `--plot` for the live plot window and PNG (e.g. `-c 0 -l 0.5 -d 20 --plot`); with multiple cores, `--plot` is ignored.
 
 ## Examples
 
