@@ -74,8 +74,8 @@ class PlottingClosedLoopActuator(ClosedLoopActuator):
         super(PlottingClosedLoopActuator,
               self).__init__(controller, monitor, duration, target)
 
-        cpu_core = psutil.Process(os.getpid()).cpu_affinity()[0]
-        self.graph = RealTimePlot(self.duration, cpu_core, target)
+        # target = core index; target load % from controller (no cpu_affinity: not supported on macOS)
+        self.graph = RealTimePlot(self.duration, target, self.controller.get_cpu_target() * 100)
 
     def send_plot_sample(self):
         if (time.time() - self.last_plot_time) > 0.2:

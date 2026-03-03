@@ -17,6 +17,24 @@ from utils.Controller import ControllerThread
 from utils.Monitor import MonitorThread
 
 
+def _available_cores():
+    """Return list of available CPU core indices. Works on Linux, macOS, Windows."""
+    try:
+        p = psutil.Process(os.getpid())
+        return list(p.cpu_affinity())
+    except (AttributeError, psutil.AccessDenied):
+        return list(range(psutil.cpu_count()))
+
+
+def _set_cpu_affinity(core_id):
+    """Pin process to a CPU core if the platform supports it (Linux, Windows). No-op on macOS."""
+    try:
+        process = psutil.Process(os.getpid())
+        process.cpu_affinity([core_id])
+    except (AttributeError, psutil.AccessDenied):
+        pass
+
+
 class ShutdownException(Exception):
     pass
 
@@ -38,9 +56,8 @@ def load_core(target_core, target_load,
     if sampling_interval <= 0:
         raise Exception('Negative sampling interval!')
 
-    # lock this process to the target core
-    process = psutil.Process(os.getpid())
-    process.cpu_affinity([target_core])
+    # Lock this process to the target core (no-op on macOS; load still applied)
+    _set_cpu_affinity(target_core)
 
     monitor = MonitorThread(target_core, sampling_interval)
     control = ControllerThread(sampling_interval)
@@ -88,8 +105,7 @@ def __validate_cpu_load(ctx, param, value):
 
 
 def __validate_cpu_core(ctx, param, value):
-    p = psutil.Process(os.getpid())
-    available_cores = p.cpu_affinity()
+    available_cores = _available_cores()
 
     for v in value:
         if v not in available_cores:
@@ -113,7 +129,7 @@ def __validate_sampling_interval(ctx, param, value):
               help='CPU core to artificially load. '
                    'Can be specified multiple times to load multiple cores, '
                    'default is all cores.',
-              default=psutil.Process(os.getpid()).cpu_affinity(),
+              default=_available_cores(),
               show_default=True)
 @click.option('--cpu_load', '-l',
               type=float, multiple=True,
@@ -147,6 +163,16 @@ def __main(core, cpu_load, duration, plot, sampling_interval):
 
     # filter out repeated core indexes
     core = list(set(core))
+
+    # Plot only makes sense for a single core; ignore -p when running on multiple/all cores
+    if plot and len(core) > 1:
+        print('Plot disabled when using multiple cores (use -c 0 for single-core plot).')
+        plot = False
+
+    # Single core + plot: run in main process so the live plot window works (e.g. on macOS)
+    if len(core) == 1 and plot:
+        load_core(core[0], next(cpu_load), duration, plot, sampling_interval)
+        return
 
     # disable signal handlers before spawning processes
     signal.signal(signal.SIGINT, signal.SIG_IGN)
