@@ -7,17 +7,16 @@
 import json
 import matplotlib.pyplot as plt
 
-import sys
 import os
-
-import psutil
+import sys
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)) + '/..')
 
+from cpu_load_generator import _available_cores
 from utils.Monitor import MonitorThread
 from utils.OpenLoopActuator import OpenLoopActuator
 
-period = 0.05 # actuation period  in seconds
+period = 0.05  # actuation period in seconds
 
 def cpu_model(cpu_target):
     cpu_time = cpu_target * period
@@ -38,8 +37,7 @@ if __name__ == "__main__":
     # this test aims at characterizing the CPU
     testing = 1
     dynamics_plot_online = 0
-    p = psutil.Process(os.getpid())
-    available_cores = p.cpu_affinity()
+    available_cores = _available_cores()
     core = available_cores[0]
 
     if testing == 1:

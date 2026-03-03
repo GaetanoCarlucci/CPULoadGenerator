@@ -34,9 +34,9 @@ if __name__ == "__main__":
         monitor.start()
         actuator = OpenLoopActuator(monitor, len(sleepTimeSequence) * stepPeriod, 0, dynamics_plot_online)
         actuator.run_sequence(sleepTimeSequence)
-        
-        monitor.running = 0
-        dynamics =  monitor.get_dynamics()
+
+        monitor.stop()
+        dynamics = monitor.get_dynamics()
         actuator.close()
         monitor.join()
         

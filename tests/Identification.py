@@ -43,17 +43,14 @@ if __name__ == "__main__":
             actuator = OpenLoopActuator(monitor, 10, 0, dynamics_plot_online)
             actuator.set_sleep_time(sleepTime)
             actuator.run()
-            
-            monitor.running = 0
-            dynamics =  monitor.get_dynamics()
+
+            monitor.stop()
+            dynamics = monitor.get_dynamics()
             actuator.close()
             monitor.join()
 
             data['x'].append(sleepTime)
             data['y'].append(sum(dynamics['cpu']) / float(len(dynamics['cpu'])))
-
-            monitor.running = 0
-            monitor.join()
 
             if not dynamics_plot_online:
                 plt.figure()

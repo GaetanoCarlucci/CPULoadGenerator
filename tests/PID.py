@@ -7,13 +7,12 @@
 import json
 import matplotlib.pyplot as plt
 
-import sys
 import os
-
-import psutil
+import sys
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)) + '/..')
 
+from cpu_load_generator import _available_cores
 from utils.Monitor import MonitorThread
 from utils.Controller import ControllerThread
 from utils.ClosedLoopActuator import ClosedLoopActuator
@@ -21,14 +20,13 @@ from utils.ClosedLoopActuator import ClosedLoopActuator
 if __name__ == "__main__":
 
     ######################################################
-    #             PID TEST                               # 
+    #             PID TEST                               #
     ######################################################
     # testing activities
     # this test aims at characterizing the CPU
     testing = 1
     dynamics_plot_online = 0
-    p = psutil.Process(os.getpid())
-    available_cores = p.cpu_affinity()
+    available_cores = _available_cores()
     core = available_cores[0]
 
     if testing == 1:
