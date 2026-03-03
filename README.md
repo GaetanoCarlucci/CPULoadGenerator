@@ -17,47 +17,31 @@ You provide the desired CPU load and the CPU core(s) to load. The controller and
 
 ## Dependencies
 
-- **Python 3.6+**
+- **Python 3.9+** (tested with 3.13)
 - **Libraries:** `matplotlib`, `psutil`, `click`
 
-### Setup with virtualenv
+### Setup (Linux and macOS)
+
+Create and activate a virtual environment, then install dependencies:
 
 ```bash
 cd CPULoadGenerator/
-sudo apt install virtualenv
-virtualenv --python=python3.6 ./venv
-. venv/bin/activate
-(venv) $ pip install -r requirements.txt
+python3 -m venv venv
+source venv/bin/activate
+pip install -r requirements.txt
 ```
 
-### System-wide install (Debian/Ubuntu)
+Run the script (e.g. 20% load on core 0 for 10 seconds):
 
 ```bash
-sudo apt install python3-matplotlib python3-psutil python3-click
+python CPULoadGenerator.py -l 0.2 -d 10 -c 0
 ```
 
-### Run on macOS
+Or make the script executable and run: `chmod +x CPULoadGenerator.py` then `./CPULoadGenerator.py -l 0.2 -d 10 -c 0`.
 
-1. Create and activate a virtual environment (recommended):
+**System-wide install (Debian/Ubuntu):** `sudo apt install python3-matplotlib python3-psutil python3-click`
 
-   ```bash
-   cd CPULoadGenerator/
-   python3 -m venv venv
-   source venv/bin/activate
-   pip install -r requirements.txt
-   ```
-
-2. Run the script (e.g. 20% load on core 0 for 10 seconds):
-
-   ```bash
-   python CPULoadGenerator.py -l 0.2 -d 10 -c 0
-   ```
-
-   Or make it executable and run: `chmod +x CPULoadGenerator.py` then `./CPULoadGenerator.py -l 0.2 -d 10 -c 0`.
-
-**Note for macOS:** CPU affinity (pinning a process to a specific core) is not supported by the OS, so the process is not bound to the chosen core. The script still generates the requested load; it may just be distributed across cores by the scheduler. All other behaviour (PI control, duration) is unchanged.
-
-With `--plot`: use **exactly one core** to see the **live plot window** on macOS (e.g. `-c 0 -l 0.5 -d 20 --plot`). With multiple cores, the plot is saved to a PNG file at the end. If the window does not appear or stays blank, try `export MPLBACKEND=TkAgg` before running, or install a GUI backend: `pip install pyobjc-framework-Cocoa` (for the default macOS backend).
+**Platform notes:** On **macOS**, CPU affinity is not supported, so the load may be distributed across cores; use **exactly one core** with `--plot` for the live plot window (e.g. `-c 0 -l 0.5 -d 20 --plot`). With multiple cores, the plot is saved to a PNG at the end. If the plot window does not appear, try `export MPLBACKEND=TkAgg` or `pip install pyobjc-framework-Cocoa`.
 
 ## Examples
 

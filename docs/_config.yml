@@ -1,4 +1,4 @@
 title: CPU Load Generator
-description: A simple CPU load generator for Linux systems.
+description: A PI-controlled CPU load generator for Linux, macOS, and Windows.
 url: "https://gaetanocarlucci.github.io/CPULoadGenerator"
 theme: minima
