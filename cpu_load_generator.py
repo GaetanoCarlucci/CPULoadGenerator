@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+"""Generate a fixed CPU load on one or more cores using a PI controller."""
 
 # Authors: Gaetano Carlucci
 #         Giuseppe Cofano
@@ -37,7 +38,7 @@ def _set_cpu_affinity(core_id):
 
 
 class ShutdownException(Exception):
-    pass
+    """Raised on SIGINT/SIGTERM to trigger graceful shutdown of load generation."""
 
 
 def __sig_handler(*args):
@@ -47,6 +48,7 @@ def __sig_handler(*args):
 def load_core(target_core, target_load,
               duration_seconds=-1, plot=False,
               sampling_interval=0.1):
+    """Run the PI-controlled load generator on a single CPU core."""
     if duration_seconds >= 0:
         print(f'Loading core {target_core} ({target_load * 100.0:0>5.2f}%) for '
               f'{duration_seconds} seconds.')
@@ -55,8 +57,7 @@ def load_core(target_core, target_load,
               f'until interrupted.')
 
     if sampling_interval <= 0:
-        raise Exception('Negative sampling interval!')
-
+        raise ValueError('Negative sampling interval!')
     # Lock this process to the target core (no-op on macOS; load still applied)
     _set_cpu_affinity(target_core)
 

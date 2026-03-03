@@ -34,10 +34,10 @@ pip install -r requirements.txt
 Run the script (e.g. 20% load on core 0 for 10 seconds):
 
 ```bash
-python CPULoadGenerator.py -l 0.2 -d 10 -c 0
+python cpu_load_generator.py -l 0.2 -d 10 -c 0
 ```
 
-Or make the script executable and run: `chmod +x CPULoadGenerator.py` then `./CPULoadGenerator.py -l 0.2 -d 10 -c 0`.
+Or make the script executable and run: `chmod +x cpu_load_generator.py` then `./cpu_load_generator.py -l 0.2 -d 10 -c 0`.
 
 **System-wide install (Debian/Ubuntu):** `sudo apt install python3-matplotlib python3-psutil python3-click`
 
@@ -48,25 +48,25 @@ Or make the script executable and run: `chmod +x CPULoadGenerator.py` then `./CP
 1. **20% load on core 0 for 20 seconds:**
 
    ```bash
-   ./CPULoadGenerator.py -l 0.2 -d 20 -c 0
+   ./cpu_load_generator.py -l 0.2 -d 20 -c 0
    ```
 
 2. **65% load on cores 0, 1 and 5, until interrupted (Ctrl-C):**
 
    ```bash
-   ./CPULoadGenerator.py -l 0.65 -c 0 -c 1 -c 5
+   ./cpu_load_generator.py -l 0.65 -c 0 -c 1 -c 5
    ```
 
 3. **55% load on core 0, 12% on core 3, until interrupted:**
 
    ```bash
-   ./CPULoadGenerator.py -c 0 -c 3 -l 0.55 -l 0.12
+   ./cpu_load_generator.py -c 0 -c 3 -l 0.55 -l 0.12
    ```
 
 4. **12% load on cores 0 and 1 for 20.5 seconds, then plot the load:**
 
    ```bash
-   ./CPULoadGenerator.py -l 0.12 -c 0 -c 1 -d 20.5 --plot
+   ./cpu_load_generator.py -l 0.12 -c 0 -c 1 -d 20.5 --plot
    ```
 
 5. **Example graph of CPU load (50% target on core 0):**
