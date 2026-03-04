@@ -15,7 +15,7 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)) + '/..')
 from cpu_load_generator import _available_cores
 from utils.Monitor import MonitorThread
 from utils.Controller import ControllerThread
-from utils.ClosedLoopActuator import ClosedLoopActuator
+from utils.ClosedLoopActuator import ClosedLoopActuator, PlottingClosedLoopActuator
 
 if __name__ == "__main__":
 
@@ -36,8 +36,10 @@ if __name__ == "__main__":
 
         control = ControllerThread(0.1)
         monitor = MonitorThread(core, 0.1)
-        actuator = ClosedLoopActuator(control, monitor, len(cpuSequence) *
-                                      stepPeriod, 1)
+        # Use PlottingClosedLoopActuator to see real-time plot; use ClosedLoopActuator for no plot
+        actuator_cls = PlottingClosedLoopActuator if dynamics_plot_online else ClosedLoopActuator
+        actuator = actuator_cls(control, monitor, len(cpuSequence) *
+                                stepPeriod, core)
 
         monitor.start()
         control.start()

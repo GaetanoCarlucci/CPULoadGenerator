@@ -2,9 +2,10 @@
 #         Giuseppe Cofano
 
 import os
-import psutil
-from threading import Thread, Event, RLock
 import time
+from threading import Thread, Event, RLock
+
+import psutil
 
 
 class MonitorThread(Thread):

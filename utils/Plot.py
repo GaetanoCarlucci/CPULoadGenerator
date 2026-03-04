@@ -4,14 +4,14 @@
 import multiprocessing
 import time
 
+import matplotlib
+
 # In child processes (e.g. multiprocessing on macOS) GUI backends often fail:
-# window opens as icon but plot does not show. Use non-interactive backend and
-# save to file at the end.
+# set Agg before importing pyplot so the window is not used.
 if multiprocessing.current_process().name != 'MainProcess':
-    import matplotlib
     matplotlib.use('Agg')
 
-import matplotlib.pyplot as plt
+import matplotlib.pyplot as plt  # noqa: E402  # pylint: disable=import-outside-toplevel
 
 
 class RealTimePlot:

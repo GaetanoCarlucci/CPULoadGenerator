@@ -4,13 +4,12 @@
 # Authors: Gaetano Carlucci
 #         Giuseppe Cofano
 # Python3 port: Manuel Olguín
+import argparse
 import itertools
 import multiprocessing
 import os
 import signal
-from typing import cast, Callable
-
-import click
+import sys
 import psutil
 
 from utils.ClosedLoopActuator import ClosedLoopActuator, \
@@ -99,71 +98,59 @@ def load_core(target_core, target_load,
         control.join()
 
 
-def __validate_cpu_load(_ctx, _param, value):
-    for v in value:
+def _parse_args():
+    """Parse command-line arguments. Exits on validation errors."""
+    available = _available_cores()
+    p = argparse.ArgumentParser(
+        description='Generate a fixed CPU load on one or more cores (PI controller).'
+    )
+    p.add_argument(
+        '--core', '-c', type=int, nargs='*', default=available,
+        metavar='N',
+        help=f'CPU core(s) to load (default: all: {available})'
+    )
+    p.add_argument(
+        '--cpu_load', '-l', type=float, nargs='*', default=[0.2],
+        metavar='L',
+        help='Target load per core in [0, 1]; one value for all cores (default: 0.2)'
+    )
+    p.add_argument(
+        '--duration', '-d', type=float, default=-1,
+        help='Duration in seconds; negative = until SIGINT/SIGTERM (default: -1)'
+    )
+    p.add_argument(
+        '--plot', '-p', action='store_true',
+        help='Plot CPU load and save a PNG (single core, fixed duration only)'
+    )
+    p.add_argument(
+        '--sampling_interval', '-s', type=float, default=0.1,
+        help='PI controller sampling interval in seconds (default: 0.1)'
+    )
+    args = p.parse_args()
+
+    core = args.core if args.core else available
+    cpu_load = args.cpu_load if args.cpu_load else [0.2]
+
+    for v in core:
+        if v not in available:
+            sys.exit(f'Target core {v} is not in available cores: {available}')
+    for v in cpu_load:
         if not 0. <= v <= 1.:
-            msg = f'CPU load {v} out of range [0, 1]'
-            raise click.BadOptionUsage(message=msg, option_name='cpu_load')
-    return value
-
-
-def __validate_cpu_core(_ctx, _param, value):
-    available_cores = _available_cores()
-
-    for v in value:
-        if v not in available_cores:
-            msg = (f'Target core ({v}) is not one of the available cores: '
-                   f'{available_cores}')
-            raise click.BadOptionUsage(message=msg, option_name='core')
-    return value
-
-
-def __validate_sampling_interval(_ctx, _param, value):
-    if value < 0:
-        msg = f'Sampling interval cannot be negative ({value}).'
-        raise click.BadOptionUsage(message=msg, option_name='sampling_interval')
-    return value
-
-
-@click.command()
-@click.option('--core', '-c',
-              type=int, callback=__validate_cpu_core,
-              required=True, multiple=True,
-              help='CPU core to artificially load. '
-                   'Can be specified multiple times to load multiple cores, '
-                   'default is all cores.',
-              default=_available_cores(),
-              show_default=True)
-@click.option('--cpu_load', '-l',
-              type=float, multiple=True,
-              help='Target CPU load. If only one value is provided, '
-                   'it is applied to all affected cores, otherwise specifies '
-                   'load per affected core.',
-              default=[0.2], show_default=True, callback=__validate_cpu_load)
-@click.option('--duration', '-d',
-              type=float, default=-1, show_default=True,
-              help='Duration in seconds. If omitted or negative, '
-                   'program will run until a SIGINT or SIGTERM is received.')
-@click.option('--plot', '-p',
-              is_flag=True, default=False, show_default=True,
-              help='Plot the resulting CPU load (and save a PNG at the end). '
-                   'Can only be used with a fixed duration.')
-@click.option('--sampling_interval', '-s',
-              type=float, default=0.1, show_default=True,
-              help='Sampling interval, in seconds, '
-                   'for the internal PI controller. '
-                   'Changing this value is strongly discouraged!',
-              callback=__validate_sampling_interval)
-
-def __main(core, cpu_load, duration, plot, sampling_interval):
-    if plot and duration < 0:
-        msg = 'Plot option can only be used with a fixed duration.'
-        raise click.BadOptionUsage(message=msg, option_name='plot')
-
+            sys.exit(f'CPU load {v} out of range [0, 1]')
+    if args.sampling_interval < 0:
+        sys.exit(f'Sampling interval cannot be negative ({args.sampling_interval})')
+    if args.plot and args.duration < 0:
+        sys.exit('Plot option requires a fixed duration (use -d SECONDS).')
     if len(cpu_load) > 1 and len(cpu_load) != len(core):
-        msg = 'Number of cores and loads does not match.'
-        raise click.BadOptionUsage(message=msg, option_name='cpu_load')
-    elif len(cpu_load) == 1:
+        sys.exit('Number of cores and loads must match when specifying multiple loads.')
+
+    return core, cpu_load, args.duration, args.plot, args.sampling_interval
+
+
+def _main() -> None:
+    """Entry point: parse CLI, then run load on selected core(s)."""
+    core, cpu_load, duration, plot, sampling_interval = _parse_args()
+    if len(cpu_load) == 1:
         cpu_load = itertools.repeat(cpu_load[0], len(core))
 
     # filter out repeated core indexes
@@ -195,4 +182,4 @@ def __main(core, cpu_load, duration, plot, sampling_interval):
 
 
 if __name__ == '__main__':
-    cast(Callable[[], None], __main)()
+    _main()

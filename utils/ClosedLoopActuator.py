@@ -1,19 +1,14 @@
 # Authors: Gaetano Carlucci
 #         Giuseppe Cofano
-import os
 import time
-
-import psutil
-
 from utils.Plot import RealTimePlot
 
 
 class ClosedLoopActuator:
-    """
-        Generates CPU load by tuning the sleep time
-    """
+    """Generates CPU load by tuning sleep time via a closed-loop controller."""
 
     def __init__(self, controller, monitor, duration, target):
+        """Store controller, monitor, duration and target; sync controller with current CPU load."""
         self.controller = controller
         self.monitor = monitor
         self.duration = duration
@@ -24,12 +19,15 @@ class ClosedLoopActuator:
         self.start_time = time.time()
 
     def send_plot_sample(self):
+        """Send a sample to the plot (no-op in base class; overridden when plotting is enabled)."""
         pass  # NOOP
 
     def close(self):
+        """Release resources (no-op in base class; overridden when a plot is used)."""
         pass  # NOOP
 
     def generate_load(self, sleep_time):
+        """Burn CPU for (period - sleep_time), then sleep for sleep_time to reach target load."""
         interval = time.time() + self.period - sleep_time
         # generates some getCpuLoad for interval seconds
         while time.time() < interval:
@@ -40,6 +38,7 @@ class ClosedLoopActuator:
         time.sleep(sleep_time)
 
     def run(self):
+        """Run the closed loop until duration elapses or indefinitely if duration < 0."""
         sleep_time = 0
 
         while self.duration < 0 \
@@ -51,6 +50,9 @@ class ClosedLoopActuator:
         return sleep_time
 
     def run_sequence(self, sequence):
+        """Run the actuator through a sequence of target CPU loads (e.g. for identification).
+        Used only by test/example scripts (e.g. tests/PID.py); the CLI uses run() with -d.
+        """
         for cpuTarget in sequence:
             step_period = time.time() + 4
             self.controller.set_cpu_target(cpuTarget)
@@ -65,12 +67,13 @@ class ClosedLoopActuator:
 
 class PlottingClosedLoopActuator(ClosedLoopActuator):
     """
-        Generates CPU load by tuning the sleep time and plots results after run.
-        This is implemented through polymorphism to avoid internal
-        if-branches which generate additional, non-controlled load.
+    Closed-loop actuator that also plots CPU load in real time.
+
+    Uses polymorphism to avoid if-branches that would add uncontrolled CPU load.
     """
 
     def __init__(self, controller, monitor, duration, target):
+        """Initialize like base and create a real-time plot for this run."""
         super(PlottingClosedLoopActuator,
               self).__init__(controller, monitor, duration, target)
 
@@ -78,10 +81,12 @@ class PlottingClosedLoopActuator(ClosedLoopActuator):
         self.graph = RealTimePlot(self.duration, target, self.controller.get_cpu_target() * 100)
 
     def send_plot_sample(self):
+        """Send current CPU and target to the plot at most every 0.2 seconds."""
         if (time.time() - self.last_plot_time) > 0.2:
             self.graph.plot_sample(self.controller.get_cpu(),
                                    self.controller.get_cpu_target() * 100)
             self.last_plot_time = time.time()
 
     def close(self):
+        """Close the real-time plot and save the figure to PNG."""
         self.graph.close()

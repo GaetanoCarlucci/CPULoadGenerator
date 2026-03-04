@@ -72,3 +72,9 @@ Or make the script executable and run: `chmod +x cpu_load_generator.py` then `./
 5. **Example graph of CPU load (50% target on core 0):**
 
    ![Example - 50% load on CPU core 0](https://raw.githubusercontent.com/molguin92/CPULoadGenerator/python3_port_stable/50%25-Target-Load.png)
+
+## Tests
+
+Test and identification scripts live in `tests/` (see `tests/README.md`). Expected output from the PID script after CPU identification:
+
+![Expected output from the PID script after CPU identification](tests/PID_Actuation.png)

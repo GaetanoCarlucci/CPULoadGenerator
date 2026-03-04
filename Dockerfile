@@ -1,3 +1,6 @@
+# Image to run the CPU load generator in a container.
+# Build: docker build -t cpuloadgen .
+# Run:   docker run --rm cpuloadgen -c 0 -l 0.2 -d 10
 FROM python:3.13
 LABEL maintainer="GaetanoCarlucci <gaetano.carlucci@gmail.com>"
 
@@ -6,5 +9,5 @@ RUN cd / && git clone https://github.com/GaetanoCarlucci/CPULoadGenerator.git /C
 RUN pip install -r /CPULoadGenerator/requirements.txt
 
 WORKDIR /CPULoadGenerator
-ENTRYPOINT ["./cpu_load_generator.py"]
+ENTRYPOINT ["python", "cpu_load_generator.py"]
 CMD ["--help"]
