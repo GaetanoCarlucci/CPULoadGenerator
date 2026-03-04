@@ -87,4 +87,4 @@ docker run --rm gaetano/cpuloadgen -c 0 -l 0.2 -d 10
 
 Test and identification scripts live in `tests/` (see `tests/README.md`). Expected output from the PID script after CPU identification:
 
-![Expected output from the PID script after CPU identification](tests/PID_Actuation.png)
+   ![Expected output from the PID script after CPU identification](tests/PID_Actuation.png)
