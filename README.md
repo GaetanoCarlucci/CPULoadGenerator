@@ -43,6 +43,16 @@ Or make the script executable and run: `chmod +x cpu_load_generator.py` then `./
 
 **Platform notes:** On **macOS**, CPU affinity is not supported, so the load may be distributed across cores. Use **exactly one core** with `--plot` for the live plot window and PNG (e.g. `-c 0 -l 0.5 -d 20 --plot`); with multiple cores, `--plot` is ignored.
 
+## Docker
+
+**Run from Docker Hub:**
+
+```bash
+docker run --rm gaetano/cpuloadgen -c 0 -l 0.2 -d 10
+```
+
+**Build locally:** `docker build -t cpuloadgen .`
+
 ## Examples
 
 1. **20% load on core 0 for 20 seconds:**
