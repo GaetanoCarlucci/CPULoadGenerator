@@ -18,7 +18,6 @@ You provide the desired CPU load and the CPU core(s) to load. The controller and
 ## Dependencies
 
 - **Python 3.9+** (tested with 3.13)
-- **Libraries:** `matplotlib`, `psutil`, `click`
 
 ### Setup (Linux and macOS)
 
