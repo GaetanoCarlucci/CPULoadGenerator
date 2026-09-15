@@ -13,7 +13,7 @@ You provide the desired CPU load and the CPU core(s) to load. The controller and
 ## Theoretical insight
 
 - **Project homepage:** [https://gaetanocarlucci.github.io/CPULoadGenerator/](https://gaetanocarlucci.github.io/CPULoadGenerator/) — more details on the tool.
-- **Blog:** [Theoretical explanation of this tool](https://gaetanocarlucci.altervista.org/cpu-load-generator-project/).
+- **Blog:** [Theoretical explanation of this tool](https://www.gaetanocarlucci.com/posts/cpu-load-generator).
 
 ## Dependencies
 
