@@ -68,7 +68,7 @@ The figure below shows the controller maintaining 50% CPU load.
 ## Resources
 
 - [Source Code on GitHub](https://github.com/GaetanoCarlucci/CPULoadGenerator)
-- [Original Article](https://gaetanocarlucci.altervista.org/cpu-load-generator-project/)
+- [Original Article](https://www.gaetanocarlucci.com/posts/cpu-load-generator)
 
 ---
 
